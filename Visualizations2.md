@@ -7,7 +7,6 @@ output:
     keep_md: true
 ---
 
-
 ### Load Data
 
 ```r
