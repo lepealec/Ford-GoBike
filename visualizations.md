@@ -19,7 +19,7 @@ Note: These visualizations are based on individual trip records and not by indiv
 
 ```r
 FGB %>% filter(age <= 80 & user_type=="Subscriber") %>% ggplot(aes(x=age)) + geom_histogram() + 
-xlab("Age") + ylab("Count") + ggtitle("Subscriber Count by Age") + scale_y_continuous(name="Count", labels = scales::comma)
+xlab("Age") + ylab("Count") + ggtitle("Ride Count by Age") + scale_y_continuous(name="Count", labels = scales::comma)
 ```
 
 ![](visualizations_files/figure-html/graph1-1.png)<!-- -->
@@ -28,7 +28,7 @@ xlab("Age") + ylab("Count") + ggtitle("Subscriber Count by Age") + scale_y_conti
 ```r
 FGB %>% filter(age <= 80 & user_type=="Customer") %>% ggplot(aes(x=age)) + geom_histogram() +
   xlab("Age") + ylab("Count") + scale_y_continuous(name="Count", labels = scales::comma) +
-  ggtitle("Customer Count by Age")
+  ggtitle("Ride Count by Age")
 ```
 
 ![](visualizations_files/figure-html/graph2-1.png)<!-- -->
@@ -37,7 +37,7 @@ FGB %>% filter(age <= 80 & user_type=="Customer") %>% ggplot(aes(x=age)) + geom_
 ```r
 FGB %>% ggplot(aes(x=member_gender)) + geom_bar() + 
   xlab("Gender")+ylab("Count") + scale_y_continuous(name="Count", labels = scales::comma) +
-  ggtitle("Total Gender Count")
+  ggtitle("Ride Gender Count")
 ```
 
 ![](visualizations_files/figure-html/graph3-1.png)<!-- -->
