@@ -418,14 +418,13 @@ plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"
 plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Saturdays)")
 ```
 
-![](Visualizations2_files/figure-html/Total Rides Over Time-3.png)<!-- -->
+![](Visualizations2_files/figure-html/b-1.png)<!-- -->
 
 ```r
 plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Sundays)")
 ```
 
-![](Visualizations2_files/figure-html/Total Rides Over Time-4.png)<!-- -->
-
+![](Visualizations2_files/figure-html/c-1.png)<!-- -->
 
 ```r
 FGB %>% filter(start_hr %in% seq(0,23) & start_daytype %in% c("Saturday","Sunday")) %>% ggplot(aes(x=start_hr)) + 
