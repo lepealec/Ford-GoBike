@@ -403,10 +403,14 @@ x1;x2;x3;x4;x5
 
 ```r
 ss=filter_data_1d(FGB,"start_date",col="start_daytype")[['start_date']]
+```
+
+```r
 plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (All Daytypes)")
 ```
 
-![](Visualizations2_files/figure-html/Total Rides Over Time-1.png)<!-- -->
+![](Visualizations2_files/figure-html/a0-1.png)<!-- -->
+
 
 ```r
 plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday","Sunday"),not=T)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Weekdays)")
