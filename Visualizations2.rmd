@@ -157,3 +157,10 @@ plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"
 plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Saturdays)")
 plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Sundays)")
 ```
+
+``` {r a}
+FGB %>% filter(start_hr %in% seq(0,23) & start_daytype %in% c("Saturday","Sunday")) %>% ggplot(aes(x=start_hr)) + 
+  geom_histogram(aes(y=..density..),position="identity") + stat_bin(bins=24)+
+  scale_y_continuous(name="Count", labels = scales::comma)+
+  facet_grid(start_daytype ~ .)
+```

@@ -425,3 +425,13 @@ plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Sunday"),
 ```
 
 ![](Visualizations2_files/figure-html/Total Rides Over Time-4.png)<!-- -->
+
+
+```r
+FGB %>% filter(start_hr %in% seq(0,23) & start_daytype %in% c("Saturday","Sunday")) %>% ggplot(aes(x=start_hr)) + 
+  geom_histogram(aes(y=..density..),position="identity") + stat_bin(bins=24)+
+  scale_y_continuous(name="Count", labels = scales::comma)+
+  facet_grid(start_daytype ~ .)
+```
+
+![](Visualizations2_files/figure-html/a-1.png)<!-- -->
