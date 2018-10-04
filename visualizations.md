@@ -112,7 +112,7 @@ FGB %>% filter(duration_sec/60<30) %>% ggplot(aes(x=duration_sec/60)) +
 FGB %>% filter(duration_sec/60<30) %>% ggplot(aes(x=duration_sec/60)) + 
   stat_ecdf()  + scale_y_continuous(name="Cumulative Proportion", labels = scales::percent) + 
   scale_x_continuous(name="Duraction in Minutes", labels = scales::comma)+
-  ggtitle("Cumulative Duration Distribution by Year \n(below 30 minutes)")+facet_grid("start_year")
+  ggtitle("Cumulative Duration Distribution by Year \n(below 30 minutes)")+facet_grid(start_year~.)
 ```
 
 ![](visualizations_files/figure-html/graph10-1.png)<!-- -->

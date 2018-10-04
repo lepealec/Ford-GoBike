@@ -16,42 +16,39 @@ sessionInfo()
 ```
 
 ```
-## R version 3.5.1 (2018-07-02)
-## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 7 x64 (build 7601) Service Pack 1
+## R version 3.5.0 (2018-04-23)
+## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+## Running under: macOS High Sierra 10.13.6
 ## 
 ## Matrix products: default
+## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
-## [1] LC_COLLATE=English_United States.1252 
-## [2] LC_CTYPE=English_United States.1252   
-## [3] LC_MONETARY=English_United States.1252
-## [4] LC_NUMERIC=C                          
-## [5] LC_TIME=English_United States.1252    
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
 ##  [1] rjson_0.2.20      lubridate_1.7.4   skimr_1.0.3      
-##  [4] forcats_0.3.0     stringr_1.3.1     dplyr_0.7.6      
+##  [4] forcats_0.3.0     stringr_1.3.0     dplyr_0.7.6      
 ##  [7] purrr_0.2.5       readr_1.1.1       tidyr_0.8.1      
-## [10] tibble_1.4.2      ggplot2_3.0.0     tidyverse_1.2.1  
+## [10] tibble_1.4.2      ggplot2_2.2.1     tidyverse_1.2.1  
 ## [13] RCurl_1.95-4.11   bitops_1.0-6      data.table_1.11.4
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_0.2.4 haven_1.1.2      lattice_0.20-35  colorspace_1.3-2
-##  [5] htmltools_0.3.6  yaml_2.2.0       rlang_0.2.2      pillar_1.3.0    
-##  [9] glue_1.3.0       withr_2.1.2      modelr_0.1.2     readxl_1.1.0    
-## [13] bindrcpp_0.2.2   bindr_0.1.1      plyr_1.8.4       munsell_0.5.0   
-## [17] gtable_0.2.0     cellranger_1.1.0 rvest_0.3.2      evaluate_0.11   
-## [21] knitr_1.20       broom_0.5.0      Rcpp_0.12.18     scales_1.0.0    
-## [25] backports_1.1.2  jsonlite_1.5     hms_0.4.2        digest_0.6.16   
-## [29] stringi_1.1.7    grid_3.5.1       rprojroot_1.3-2  cli_1.0.0       
-## [33] tools_3.5.1      magrittr_1.5     lazyeval_0.2.1   crayon_1.3.4    
-## [37] pkgconfig_2.0.2  xml2_1.2.0       assertthat_0.2.0 rmarkdown_1.10  
-## [41] httr_1.3.1       rstudioapi_0.7   R6_2.2.2         nlme_3.1-137    
-## [45] compiler_3.5.1
+##  [1] Rcpp_0.12.16     cellranger_1.1.0 compiler_3.5.0   pillar_1.2.2    
+##  [5] plyr_1.8.4       bindr_0.1.1      tools_3.5.0      digest_0.6.15   
+##  [9] jsonlite_1.5     evaluate_0.11    nlme_3.1-137     gtable_0.2.0    
+## [13] lattice_0.20-35  pkgconfig_2.0.2  rlang_0.2.0      cli_1.0.0       
+## [17] rstudioapi_0.7   yaml_2.2.0       haven_1.1.2      bindrcpp_0.2.2  
+## [21] xml2_1.2.0       httr_1.3.1       knitr_1.20       hms_0.4.2       
+## [25] rprojroot_1.3-2  grid_3.5.0       tidyselect_0.2.4 glue_1.2.0      
+## [29] R6_2.2.2         readxl_1.1.0     rmarkdown_1.10   modelr_0.1.2    
+## [33] magrittr_1.5     backports_1.1.2  scales_0.5.0     htmltools_0.3.6 
+## [37] rvest_0.3.2      assertthat_0.2.0 colorspace_1.3-2 stringi_1.2.2   
+## [41] lazyeval_0.2.1   munsell_0.4.3    broom_0.5.0      crayon_1.3.4
 ```
 ### Load libraries
 
@@ -76,14 +73,14 @@ GenMatrix=function(cns,name){
 ### Load 2017 data
 
 ```r
-setwd("~/Ford-GoBike/Raw Data")
+setwd("~/Ford-GoBike")
 #fn="FGB 2017 Data.csv"
 FGB2017=fread("https://s3.amazonaws.com/fordgobike-data/2017-fordgobike-tripdata.csv")
 ```
 ### Load available 2018 data
 
 ```r
-setwd("~/Ford-GoBike/Raw Data")
+setwd("~/Ford-GoBike")
 for (yrmo in seq(201801,201812)){
   link=paste0("https://s3.amazonaws.com/fordgobike-data/",yrmo,"-fordgobike-tripdata.csv.zip")
   zip=strsplit(link,"/")[[1]][5]
@@ -159,6 +156,14 @@ for (yrmo in seq(201801,201812)){
 ```
 
 ```r
+  Sep2018=fread("201809-fordgobike-tripdata.csv") ;   file.remove("201809-fordgobike-tripdata.csv")
+```
+
+```
+## [1] TRUE
+```
+
+```r
   #expand to include future months when available
 ```
 ### Combine all data into one data table.
@@ -167,7 +172,7 @@ for (yrmo in seq(201801,201812)){
 FGB=rbindlist(list(FGB2017,
                    Jan2018,Feb2018,Mar2018,
                    Apr2018,May2018,Jun2018,
-                   Jul2018,Aug2018),fill=T)
+                   Jul2018,Aug2018,Sep2018),fill=T)
 rm(list=c('FGB2017',
           'Jan2018',
           'Feb2018',
@@ -175,7 +180,8 @@ rm(list=c('FGB2017',
           'May2018',
           'Jun2018',
           'Jul2018',
-          'Aug2018'))
+          'Aug2018',
+          'Sep2018'))
 
 #expand to include future months when available
 ```
@@ -211,23 +217,23 @@ Stations
 ##   4:          3 Powell St BART Station (Market St at 4th St)     SF-G27
 ##   5:          4                  Cyril Magnin St at Ellis St     SF-G26
 ##  ---                                                                   
-## 628:        371                   Lombard St at Columbus Ave     SF-B25
-## 629:        372                        Madison St at 17th St      OK-K7
-## 630:        372                        Madison St at 17th St      OK-K7
-## 631:        373    Potrero del Sol Park (25th St at Utah St)     SF-R26
-## 632:        373    Potrero del Sol Park (25th St at Utah St)     SF-R26
+## 634:        375                      Grove St at Masonic Ave     SF-J16
+## 635:        376                       Illinois St at 20th St   SF-O30-2
+## 636:        376                       Illinois St at 20th St   SF-O30-2
+## 637:        377                        Fell St at Stanyan St    SF-K15-
+## 638:        377                        Fell St at Stanyan St    SF-K15-
 ##           lat       lon region_id rental_methods capacity
-##   1: 37.77643 -122.4262         3     CREDITCARD       27
-##   2: 37.77643 -122.4262         3            KEY       27
-##   3: 37.78638 -122.4049         3     CREDITCARD       35
-##   4: 37.78638 -122.4049         3            KEY       35
-##   5: 37.78588 -122.4089         3     CREDITCARD       35
+##   1: 37.77643 -122.4262         3            KEY       27
+##   2: 37.77643 -122.4262         3     CREDITCARD       27
+##   3: 37.78638 -122.4049         3            KEY       35
+##   4: 37.78638 -122.4049         3     CREDITCARD       35
+##   5: 37.78588 -122.4089         3            KEY       35
 ##  ---                                                     
-## 628: 37.80275 -122.4136        NA            KEY        0
-## 629: 37.80404 -122.2624        12     CREDITCARD       19
-## 630: 37.80404 -122.2624        12            KEY       19
-## 631: 37.75179 -122.4052        NA     CREDITCARD        0
-## 632: 37.75179 -122.4052        NA            KEY        0
+## 634: 37.77484 -122.4465        NA     CREDITCARD        0
+## 635: 37.76046 -122.3875        NA            KEY        0
+## 636: 37.76046 -122.3875        NA     CREDITCARD        0
+## 637: 37.77189 -122.4538        NA            KEY        0
+## 638: 37.77189 -122.4538        NA     CREDITCARD        0
 ##                                                    rental_url
 ##   1:  http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=74
 ##   2:  http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=74
@@ -235,11 +241,11 @@ Stations
 ##   4:   http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=3
 ##   5:   http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=4
 ##  ---                                                         
-## 628: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=371
-## 629: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=372
-## 630: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=372
-## 631: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=373
-## 632: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=373
+## 634: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=375
+## 635: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=376
+## 636: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=376
+## 637: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=377
+## 638: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=377
 ##      eightd_has_key_dispenser eightd_station_services has_kiosk
 ##   1:                    FALSE                  <list>      TRUE
 ##   2:                    FALSE                  <list>      TRUE
@@ -247,11 +253,11 @@ Stations
 ##   4:                    FALSE                              TRUE
 ##   5:                    FALSE                              TRUE
 ##  ---                                                           
-## 628:                    FALSE                             FALSE
-## 629:                    FALSE                              TRUE
-## 630:                    FALSE                              TRUE
-## 631:                    FALSE                             FALSE
-## 632:                    FALSE                             FALSE
+## 634:                    FALSE                             FALSE
+## 635:                    FALSE                             FALSE
+## 636:                    FALSE                             FALSE
+## 637:                    FALSE                             FALSE
+## 638:                    FALSE                             FALSE
 ```
 
 ```r

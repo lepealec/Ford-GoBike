@@ -43,13 +43,13 @@ GenMatrix=function(cns,name){
 ```
 ### Load 2017 data
 ```{r load_2017}
-setwd("~/Ford-GoBike/Raw Data")
+setwd("~/Ford-GoBike")
 #fn="FGB 2017 Data.csv"
 FGB2017=fread("https://s3.amazonaws.com/fordgobike-data/2017-fordgobike-tripdata.csv")
 ```
 ### Load available 2018 data
 ```{r load_2018}
-setwd("~/Ford-GoBike/Raw Data")
+setwd("~/Ford-GoBike")
 for (yrmo in seq(201801,201812)){
   link=paste0("https://s3.amazonaws.com/fordgobike-data/",yrmo,"-fordgobike-tripdata.csv.zip")
   zip=strsplit(link,"/")[[1]][5]
@@ -69,6 +69,7 @@ for (yrmo in seq(201801,201812)){
   Jun2018=fread("201806-fordgobike-tripdata.csv") ;   file.remove("201806-fordgobike-tripdata.csv")
   Jul2018=fread("201807-fordgobike-tripdata.csv") ;   file.remove("201807-fordgobike-tripdata.csv")
   Aug2018=fread("201808-fordgobike-tripdata.csv") ;   file.remove("201808-fordgobike-tripdata.csv")
+  Sep2018=fread("201809-fordgobike-tripdata.csv") ;   file.remove("201809-fordgobike-tripdata.csv")
 
   #expand to include future months when available
 ```
@@ -77,7 +78,7 @@ for (yrmo in seq(201801,201812)){
 FGB=rbindlist(list(FGB2017,
                    Jan2018,Feb2018,Mar2018,
                    Apr2018,May2018,Jun2018,
-                   Jul2018,Aug2018),fill=T)
+                   Jul2018,Aug2018,Sep2018),fill=T)
 rm(list=c('FGB2017',
           'Jan2018',
           'Feb2018',
@@ -85,7 +86,8 @@ rm(list=c('FGB2017',
           'May2018',
           'Jun2018',
           'Jul2018',
-          'Aug2018'))
+          'Aug2018',
+          'Sep2018'))
 
 #expand to include future months when available
 ```
