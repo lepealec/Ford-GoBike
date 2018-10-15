@@ -16,7 +16,6 @@ library("ggplot2")
 library("lubridate")
 library("rjson")
 knitr::opts_chunk$set(fig.width = 10, fig.length=10, fig.asp = 1/3,  message=FALSE)
-fig.path = "~/Figures"
 ```
 ### Load Data
 ```{r load}
