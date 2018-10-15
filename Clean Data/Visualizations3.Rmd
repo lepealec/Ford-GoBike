@@ -1,0 +1,56 @@
+---
+title: "Ford GoBike Data Visualization"
+author: "Alec Lepe"
+date: "09/07/2018"
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include = FALSE}
+library("data.table")
+library("RCurl")
+library("tidyverse")
+library("skimr")
+library("ggplot2")
+library("lubridate")
+library("rjson")
+knitr::opts_chunk$set(fig.width = 10, fig.length=10, fig.asp = 1/3,  message=FALSE)
+fig.path = "~/Figures"
+```
+### Load Data
+```{r load}
+setwd("~/Ford-GoBike/Clean Data")
+load("FGB.RData")
+```
+```{r graph5}
+FGB %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) + 
+  xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+  ggtitle("Total Rides Over Time by Month")
+```
+
+```{r graph5a}
+berk=FGB[FGB[["start city"]]=="Berkeley" & FGB[["end city"]]=="Berkeley",]
+berk %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+  ggtitle("Total Rides Over Time by Month\nBerkeley")
+```
+```{r graph5b}
+sanjose=FGB[FGB[["start city"]]=="San Jose" & FGB[["end city"]]=="San Jose",]
+sanjose %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+  ggtitle("Total Rides Over Time by Month\nSan Jose")
+```
+```{r graph5c}
+Oakland=FGB[FGB[["start city"]]=="Oakland" & FGB[["end city"]]=="Oakland",]
+Oakland %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+  ggtitle("Total Rides Over Time by Month\nOakland")
+```
+```{r graph5d}
+SF=FGB[FGB[["start city"]]=="San Francisco" & FGB[["end city"]]=="San Francisco",]
+SF %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+  ggtitle("Total Rides Over Time by Month \nSan Francisco")
+```
+```{r graph5e}
+Emeryville=FGB[FGB[["start city"]]=="Emeryville" & FGB[["end city"]]=="Emeryville",]
+Emeryville %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+  ggtitle("Total Rides Over Time by Month \nEmeryville")
+```

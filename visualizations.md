@@ -64,14 +64,6 @@ FGB %>% filter(age <= 40) %>% filter(member_gender!="Other") %>% ggplot(aes(x=ag
 ![](visualizations_files/figure-html/graph4a-1.png)<!-- -->
 
 
-```r
-FGB %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) + 
-  xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
-  ggtitle("Total Rides Over Time by Month")
-```
-
-![](visualizations_files/figure-html/graph5-1.png)<!-- -->
-
 
 ```r
 FGB %>% ggplot(aes(x=start_daytype)) + geom_bar() + facet_grid(start_year ~ .) + 
@@ -148,6 +140,3 @@ FGB %>% filter(start_hr %in% seq(0,23) & start_daytype %in% c("Saturday","Sunday
 ```
 
 ![](visualizations_files/figure-html/graph12-1.png)<!-- -->
-
-
-

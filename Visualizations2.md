@@ -98,6 +98,7 @@ table_data=function(dt=FGB,var1,var2,col1,col2,select1,select2){
 ```r
 ss=filter_data(FGB,"start_station_name","end_station_name")
 x1=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","San Francisco","San Francisco"),decreasing=T)[1:10])
+rownames(x1)[10]=paste0(strsplit(rownames(x1)[10],"")[[1]][1:(length(strsplit(rownames(x1)[10],"")[[1]])-24)],collapse="")
 x2=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","Oakland","Oakland"),decreasing=T)[1:10])
 x3=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","Berkeley","Berkeley"),decreasing=T)[1:10])
 x4=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","San Jose","San Jose"),decreasing=T)[1:10])
@@ -114,17 +115,17 @@ x1;x2;x3;x4;x5
 ```
 
 ```
-##                                                                                                   San Francisco
-## San Francisco Ferry Building (Harry Bridges Plaza) , The Embarcadero at Sansome St                         9599
-## The Embarcadero at Sansome St , Steuart St at Market St                                                    5516
-## Berry St at 4th St , San Francisco Ferry Building (Harry Bridges Plaza)                                    5237
-## The Embarcadero at Sansome St , San Francisco Ferry Building (Harry Bridges Plaza)                         4729
-## San Francisco Ferry Building (Harry Bridges Plaza) , Berry St at 4th St                                    3954
-## Steuart St at Market St , The Embarcadero at Sansome St                                                    3890
-## The Embarcadero at Sansome St , The Embarcadero at Sansome St                                              3351
-## Howard St at Beale St , San Francisco Caltrain (Townsend St at 4th St)                                     3220
-## Market St at 10th St , San Francisco Caltrain Station 2  (Townsend St at 4th St)                           3210
-## Montgomery St BART Station (Market St at 2nd St) , San Francisco Caltrain (Townsend St at 4th St)          3021
+##                                                                                    San Francisco
+## San Francisco Ferry Building (Harry Bridges Plaza) , The Embarcadero at Sansome St          9599
+## The Embarcadero at Sansome St , Steuart St at Market St                                     5516
+## Berry St at 4th St , San Francisco Ferry Building (Harry Bridges Plaza)                     5237
+## The Embarcadero at Sansome St , San Francisco Ferry Building (Harry Bridges Plaza)          4729
+## San Francisco Ferry Building (Harry Bridges Plaza) , Berry St at 4th St                     3954
+## Steuart St at Market St , The Embarcadero at Sansome St                                     3890
+## The Embarcadero at Sansome St , The Embarcadero at Sansome St                               3351
+## Howard St at Beale St , San Francisco Caltrain (Townsend St at 4th St)                      3220
+## Market St at 10th St , San Francisco Caltrain Station 2  (Townsend St at 4th St)            3210
+## Montgomery St BART Station (Market St at 2nd St) , San Francisco Caltrain                   3021
 ```
 
 ```
@@ -407,28 +408,154 @@ ss=filter_data_1d(FGB,"start_date",col="start_daytype")[['start_date']]
 
 
 ```r
-plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (All Daytypes)")
+plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes)")
 ```
 
 ![](Visualizations2_files/figure-html/a0-1.png)<!-- -->
 
 
 ```r
-plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday","Sunday"),not=T)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Weekdays)")
+plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday","Sunday"),not=T)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Weekdays)")
 ```
 
 ![](Visualizations2_files/figure-html/a-1.png)<!-- -->
 
 
 ```r
-plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Saturdays)")
+plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays)")
 ```
 
 ![](Visualizations2_files/figure-html/b-1.png)<!-- -->
 
 
 ```r
-plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n (Sundays)")
+plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays)")
 ```
 
 ![](Visualizations2_files/figure-html/c-1.png)<!-- -->
+
+
+```r
+berk=FGB[FGB[["start city"]]=="Berkeley" & FGB[["end city"]]=="Berkeley",]
+ss=filter_data_1d(berk,"start_date",col="start_daytype")[['start_date']]
+```
+
+```r
+plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nBerkeley")
+```
+
+![](Visualizations2_files/figure-html/berk1-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(berk,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nBerkeley")
+```
+
+![](Visualizations2_files/figure-html/berk3-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(berk,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nBerkeley")
+```
+
+![](Visualizations2_files/figure-html/berk4-1.png)<!-- -->
+
+```r
+sanjose=FGB[FGB[["start city"]]=="San Jose" & FGB[["end city"]]=="San Jose",]
+ss=filter_data_1d(sanjose,"start_date",col="start_daytype")[['start_date']]
+```
+
+```r
+plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nSan Jose")
+```
+
+![](Visualizations2_files/figure-html/sanjose1-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(sanjose,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nSan Jose")
+```
+
+![](Visualizations2_files/figure-html/sanjose3-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(sanjose,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nSan Jose")
+```
+
+![](Visualizations2_files/figure-html/sanjose4-1.png)<!-- -->
+
+```r
+sanFrancisco=FGB[FGB[["start city"]]=="San Francisco" & FGB[["end city"]]=="San Francisco",]
+ss=filter_data_1d(sanFrancisco,"start_date",col="start_daytype")[['start_date']]
+```
+
+```r
+plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nSan Francisco")
+```
+
+![](Visualizations2_files/figure-html/sanFrancisco1-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(sanFrancisco,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nSan Francisco")
+```
+
+![](Visualizations2_files/figure-html/sanFrancisco3-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(sanFrancisco,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nSan Francisco")
+```
+
+![](Visualizations2_files/figure-html/sanFrancisco4-1.png)<!-- -->
+
+```r
+Oakland=FGB[FGB[["start city"]]=="Oakland" & FGB[["end city"]]=="Oakland",]
+ss=filter_data_1d(Oakland,"start_date",col="start_daytype")[['start_date']]
+```
+
+```r
+plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nOakland")
+```
+
+![](Visualizations2_files/figure-html/Oakland1-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(Oakland,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nOakland")
+```
+
+![](Visualizations2_files/figure-html/Oakland3-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(Oakland,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nOakland")
+```
+
+![](Visualizations2_files/figure-html/Oakland4-1.png)<!-- -->
+
+```r
+Emeryville=FGB[FGB[["start city"]]=="Emeryville" & FGB[["end city"]]=="Emeryville",]
+ss=filter_data_1d(Emeryville,"start_date",col="start_daytype")[['start_date']]
+```
+
+```r
+plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nEmeryville")
+```
+
+![](Visualizations2_files/figure-html/Emeryville1-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(Emeryville,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nEmeryville")
+```
+
+![](Visualizations2_files/figure-html/Emeryville3-1.png)<!-- -->
+
+```r
+plot(table(filter_data_1d(Emeryville,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nEmeryville")
+```
+
+![](Visualizations2_files/figure-html/Emeryville4-1.png)<!-- -->

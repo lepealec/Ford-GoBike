@@ -57,11 +57,6 @@ FGB %>% filter(age <= 40) %>% filter(member_gender!="Other") %>% ggplot(aes(x=ag
   ggtitle("Gender And Age Histograms")
 ```
 
-```{r graph5}
-FGB %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) + 
-  xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
-  ggtitle("Total Rides Over Time by Month")
-```
 
 ```{r graph6}
 FGB %>% ggplot(aes(x=start_daytype)) + geom_bar() + facet_grid(start_year ~ .) + 
@@ -115,6 +110,3 @@ FGB %>% filter(start_hr %in% seq(0,23) & start_daytype %in% c("Saturday","Sunday
   scale_y_continuous(name="Count", labels = scales::comma)+
   facet_grid(start_daytype ~ .)
 ```
-
-
-
