@@ -4,8 +4,11 @@ author: "Alec Lepe"
 date: "09/07/2018"
 output: 
   html_document:
-    keep_md: true
+    fig_width: 6
+    fig_height: 4
 ---
+  <!-- html_document: -->
+  <!--   keep_md: true -->
 ```{r setup, include = FALSE}
 library("data.table")
 library("RCurl")
