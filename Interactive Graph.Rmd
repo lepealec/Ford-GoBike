@@ -22,7 +22,7 @@ library("devtools")
 #devtools::install_github(c("ramnathv/htmlwidgets", "rstudio/dygraphs"),force=TRUE)
 library(dygraphs)
 library(xts)
-#knitr::opts_chunk$set(fig.width = 5, fig.asp = 1/3)
+knitr::opts_chunk$set(fig.width=8, fig.height=7)
 ```
 ``` {r load}
 setwd("~/Ford-GoBike/Clean Data")
@@ -34,12 +34,6 @@ x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
 x=x[order(x[["start_date"]]),]
 y=xts(x,x[["start_date"]])
-dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
-```
-``` {r total_bikeship1}
-dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
-```
-``` {r, fig.width=6, fig.height=2.5}
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_sf}
