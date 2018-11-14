@@ -1,0 +1,59 @@
+---
+title: "Ford GoBike Data Collection & Cleaning"
+author: "Alec Lepe"
+date: "09/07/2018"
+output: 
+  html_document:
+    keep_md: true
+---
+```{r setup, include = FALSE}
+setwd("~/Ford-GoBike/Clean Data")
+load("FGB.RData")
+library("tidyverse")
+library("skimr")
+library("ggplot2")
+library("data.table")
+library("lubridate")
+library('biganalytics')
+library("ggmap")
+```
+
+``` {r clean_FGB}
+colnames(FGB)[colnames(FGB)=="start city"]="start_city"
+colnames(FGB)[colnames(FGB)=="end city"]="end_city"
+FGB_lon_lat=FGB %>% select(start_station_name,start_city,start_station_longitude,start_station_latitude)
+FGB_lon_lat=unique(FGB_lon_lat)
+FGB_lon_lat=FGB_lon_lat[FGB_lon_lat[["start_station_name"]]!="NULL",]
+FGB_lon_lat=FGB_lon_lat[!is.na(FGB_lon_lat[["start_city"]]),]
+#Number of stations per city
+sort(table(FGB_lon_lat[[2]]),T)
+```
+``` {r first_map}
+FGB_lon_lat %>% ggplot(aes(x=start_station_longitude, y=start_station_latitude)) +
+  geom_point()
+```
+
+``` {r Berkeley}
+vc=c("Berkeley")
+zo=13
+x=FGB[FGB[["start_city"]] %in% vc  & FGB[["end_city"]] %in% vc,]
+x=x[!duplicated(paste(x[["end_station_id"]],x[["start_station_id"]])),]
+map <- get_map(location = c(lon=mean(x[["start_station_longitude"]]), lat=mean(x[["start_station_latitude"]])), zoom = zo, maptype = "roadmap")
+ggmap(map) +
+  geom_point(data = x, aes(x = start_station_longitude, y = start_station_latitude), size = 0.8, shape = 19) +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank()
+  )
+```
+``` {r SJ}
+vc=c("San Jose")
+zo=13
+x=FGB[FGB[["start_city"]] %in% vc  & FGB[["end_city"]] %in% vc,]
+x=x[!duplicated(paste(x[["end_station_id"]],x[["start_station_id"]])),]
+map <- get_map(location = c(lon=mean(x[["start_station_longitude"]]), lat=mean(x[["start_station_latitude"]])), zoom = zo, maptype = "roadmap")
+ggmap(map) +
+  geom_point(data = x, aes(x = start_station_longitude, y = start_station_latitude), size = 0.8, shape = 19) +
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank()
+  )
+```

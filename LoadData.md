@@ -38,8 +38,8 @@ sessionInfo()
 ## [13] RCurl_1.95-4.11   bitops_1.0-6      data.table_1.11.4
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.16     cellranger_1.1.0 compiler_3.5.0   pillar_1.2.2    
-##  [5] plyr_1.8.4       bindr_0.1.1      tools_3.5.0      digest_0.6.15   
+##  [1] Rcpp_1.0.0       cellranger_1.1.0 compiler_3.5.0   pillar_1.2.2    
+##  [5] plyr_1.8.4       bindr_0.1.1      tools_3.5.0      digest_0.6.18   
 ##  [9] jsonlite_1.5     evaluate_0.11    nlme_3.1-137     gtable_0.2.0    
 ## [13] lattice_0.20-35  pkgconfig_2.0.2  rlang_0.2.0      cli_1.0.0       
 ## [17] rstudioapi_0.7   yaml_2.2.0       haven_1.1.2      bindrcpp_0.2.2  
@@ -164,6 +164,14 @@ for (yrmo in seq(201801,201812)){
 ```
 
 ```r
+  Oct2018=fread("201810-fordgobike-tripdata.csv") ;   file.remove("201810-fordgobike-tripdata.csv")
+```
+
+```
+## [1] TRUE
+```
+
+```r
   #expand to include future months when available
 ```
 ### Combine all data into one data table.
@@ -172,7 +180,7 @@ for (yrmo in seq(201801,201812)){
 FGB=rbindlist(list(FGB2017,
                    Jan2018,Feb2018,Mar2018,
                    Apr2018,May2018,Jun2018,
-                   Jul2018,Aug2018,Sep2018),fill=T)
+                   Jul2018,Aug2018,Sep2018,Oct2018),fill=T)
 rm(list=c('FGB2017',
           'Jan2018',
           'Feb2018',
@@ -181,7 +189,9 @@ rm(list=c('FGB2017',
           'Jun2018',
           'Jul2018',
           'Aug2018',
-          'Sep2018'))
+          'Sep2018',
+          'Oct2018'
+))
 
 #expand to include future months when available
 ```
@@ -210,30 +220,42 @@ Stations
 ```
 
 ```
-##      station_id                                         name short_name
-##   1:         74                        Laguna St at Hayes St     SF-J21
-##   2:         74                        Laguna St at Hayes St     SF-J21
-##   3:          3 Powell St BART Station (Market St at 4th St)     SF-G27
-##   4:          3 Powell St BART Station (Market St at 4th St)     SF-G27
-##   5:          4                  Cyril Magnin St at Ellis St     SF-G26
-##  ---                                                                   
-## 634:        375                      Grove St at Masonic Ave     SF-J16
-## 635:        376                       Illinois St at 20th St   SF-O30-2
-## 636:        376                       Illinois St at 20th St   SF-O30-2
-## 637:        377                        Fell St at Stanyan St    SF-K15-
-## 638:        377                        Fell St at Stanyan St    SF-K15-
-##           lat       lon region_id rental_methods capacity
-##   1: 37.77643 -122.4262         3            KEY       27
-##   2: 37.77643 -122.4262         3     CREDITCARD       27
-##   3: 37.78638 -122.4049         3            KEY       35
-##   4: 37.78638 -122.4049         3     CREDITCARD       35
-##   5: 37.78588 -122.4089         3            KEY       35
-##  ---                                                     
-## 634: 37.77484 -122.4465        NA     CREDITCARD        0
-## 635: 37.76046 -122.3875        NA            KEY        0
-## 636: 37.76046 -122.3875        NA     CREDITCARD        0
-## 637: 37.77189 -122.4538        NA            KEY        0
-## 638: 37.77189 -122.4538        NA     CREDITCARD        0
+##      station_id                          external_id
+##   1:         74 83b33e8d-bf8c-4a2a-8ee3-942834af27b4
+##   2:         74 83b33e8d-bf8c-4a2a-8ee3-942834af27b4
+##   3:          3 1b13a386-c5f4-42cc-bc3b-ded95982e090
+##   4:          3 1b13a386-c5f4-42cc-bc3b-ded95982e090
+##   5:          4 a00d04e6-0159-466a-b3ab-23f9550f418c
+##  ---                                                
+## 642:        380 175541bb-0ac6-42ba-bb50-071317d1237b
+## 643:        381 2c3d0e1d-f278-48df-b887-4723d4bcbefe
+## 644:        381 2c3d0e1d-f278-48df-b887-4723d4bcbefe
+## 645:        383 63758c7b-dfd9-4548-92a2-28fe8efb2faa
+## 646:        383 63758c7b-dfd9-4548-92a2-28fe8efb2faa
+##                                              name short_name      lat
+##   1:                        Laguna St at Hayes St     SF-J21 37.77643
+##   2:                        Laguna St at Hayes St     SF-J21 37.77643
+##   3: Powell St BART Station (Market St at 4th St)     SF-G27 37.78638
+##   4: Powell St BART Station (Market St at 4th St)     SF-G27 37.78638
+##   5:                  Cyril Magnin St at Ellis St     SF-G26 37.78588
+##  ---                                                                 
+## 642:                       Masonic Ave at Turk St     SF-I16 37.77919
+## 643:                        20th St at Dolores St     SF-P21 37.75824
+## 644:                        20th St at Dolores St     SF-P21 37.75824
+## 645:               Golden Gate Ave at Franklin St     SF-I22 37.78079
+## 646:               Golden Gate Ave at Franklin St     SF-I22 37.78079
+##            lon region_id rental_methods capacity
+##   1: -122.4262         3            KEY       27
+##   2: -122.4262         3     CREDITCARD       27
+##   3: -122.4049         3            KEY       35
+##   4: -122.4049         3     CREDITCARD       35
+##   5: -122.4089         3            KEY       35
+##  ---                                            
+## 642: -122.4473        NA     CREDITCARD        0
+## 643: -122.4261         3            KEY       27
+## 644: -122.4261         3     CREDITCARD       27
+## 645: -122.4219        NA            KEY        0
+## 646: -122.4219        NA     CREDITCARD        0
 ##                                                    rental_url
 ##   1:  http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=74
 ##   2:  http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=74
@@ -241,11 +263,11 @@ Stations
 ##   4:   http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=3
 ##   5:   http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=4
 ##  ---                                                         
-## 634: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=375
-## 635: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=376
-## 636: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=376
-## 637: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=377
-## 638: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=377
+## 642: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=380
+## 643: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=381
+## 644: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=381
+## 645: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=383
+## 646: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=383
 ##      eightd_has_key_dispenser eightd_station_services has_kiosk
 ##   1:                    FALSE                  <list>      TRUE
 ##   2:                    FALSE                  <list>      TRUE
@@ -253,11 +275,11 @@ Stations
 ##   4:                    FALSE                              TRUE
 ##   5:                    FALSE                              TRUE
 ##  ---                                                           
-## 634:                    FALSE                             FALSE
-## 635:                    FALSE                             FALSE
-## 636:                    FALSE                             FALSE
-## 637:                    FALSE                             FALSE
-## 638:                    FALSE                             FALSE
+## 642:                    FALSE                             FALSE
+## 643:                    FALSE                              TRUE
+## 644:                    FALSE                              TRUE
+## 645:                    FALSE                             FALSE
+## 646:                    FALSE                             FALSE
 ```
 
 ```r

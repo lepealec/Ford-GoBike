@@ -24,7 +24,7 @@ FGB_lon_lat %>% ggplot(aes(x=start_station_longitude, y=start_station_latitude))
   geom_point()
 vc=c("Berkeley","Emeryville","Oakland")
 vc=c("Berkeley")
-
+type="Berkeley"
 x=
 FGB[
 #  FGB[["start_year"]]==2018 &
@@ -44,6 +44,7 @@ ggmap(map) +
   theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(),
         axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank()
   )
+
 ggsave(filename="Berkeley.jpg", width = 4, height = 4, units = "cm", plot=last_plot())
 x[[""]]
 geom_line()
