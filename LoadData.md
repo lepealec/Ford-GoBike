@@ -16,39 +16,42 @@ sessionInfo()
 ```
 
 ```
-## R version 3.5.0 (2018-04-23)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS High Sierra 10.13.6
+## R version 3.5.1 (2018-07-02)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## Running under: Windows 7 x64 (build 7601) Service Pack 1
 ## 
 ## Matrix products: default
-## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## [1] LC_COLLATE=English_United States.1252 
+## [2] LC_CTYPE=English_United States.1252   
+## [3] LC_MONETARY=English_United States.1252
+## [4] LC_NUMERIC=C                          
+## [5] LC_TIME=English_United States.1252    
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
 ##  [1] rjson_0.2.20      lubridate_1.7.4   skimr_1.0.3      
-##  [4] forcats_0.3.0     stringr_1.3.0     dplyr_0.7.6      
-##  [7] purrr_0.2.5       readr_1.1.1       tidyr_0.8.1      
-## [10] tibble_1.4.2      ggplot2_2.2.1     tidyverse_1.2.1  
-## [13] RCurl_1.95-4.11   bitops_1.0-6      data.table_1.11.4
+##  [4] forcats_0.3.0     stringr_1.3.1     dplyr_0.7.8      
+##  [7] purrr_0.2.5       readr_1.2.1       tidyr_0.8.2      
+## [10] tibble_1.4.2      ggplot2_3.0.0     tidyverse_1.2.1  
+## [13] RCurl_1.95-4.11   bitops_1.0-6      data.table_1.11.8
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.0       cellranger_1.1.0 compiler_3.5.0   pillar_1.2.2    
-##  [5] plyr_1.8.4       bindr_0.1.1      tools_3.5.0      digest_0.6.18   
-##  [9] jsonlite_1.5     evaluate_0.11    nlme_3.1-137     gtable_0.2.0    
-## [13] lattice_0.20-35  pkgconfig_2.0.2  rlang_0.2.0      cli_1.0.0       
-## [17] rstudioapi_0.7   yaml_2.2.0       haven_1.1.2      bindrcpp_0.2.2  
-## [21] xml2_1.2.0       httr_1.3.1       knitr_1.20       hms_0.4.2       
-## [25] rprojroot_1.3-2  grid_3.5.0       tidyselect_0.2.4 glue_1.2.0      
-## [29] R6_2.2.2         readxl_1.1.0     rmarkdown_1.10   modelr_0.1.2    
-## [33] magrittr_1.5     backports_1.1.2  scales_0.5.0     htmltools_0.3.6 
-## [37] rvest_0.3.2      assertthat_0.2.0 colorspace_1.3-2 stringi_1.2.2   
-## [41] lazyeval_0.2.1   munsell_0.4.3    broom_0.5.0      crayon_1.3.4
+##  [1] Rcpp_1.0.0       cellranger_1.1.0 plyr_1.8.4       compiler_3.5.1  
+##  [5] pillar_1.3.0     bindr_0.1.1      tools_3.5.1      digest_0.6.18   
+##  [9] jsonlite_1.5     evaluate_0.12    nlme_3.1-137     gtable_0.2.0    
+## [13] lattice_0.20-35  pkgconfig_2.0.2  rlang_0.3.0.1    cli_1.0.1       
+## [17] rstudioapi_0.8   yaml_2.2.0       haven_2.0.0      bindrcpp_0.2.2  
+## [21] withr_2.1.2      xml2_1.2.0       httr_1.3.1       knitr_1.20      
+## [25] hms_0.4.2        rprojroot_1.3-2  grid_3.5.1       tidyselect_0.2.5
+## [29] glue_1.3.0       R6_2.3.0         readxl_1.1.0     rmarkdown_1.10  
+## [33] modelr_0.1.2     magrittr_1.5     backports_1.1.2  scales_1.0.0    
+## [37] htmltools_0.3.6  rvest_0.3.2      assertthat_0.2.0 colorspace_1.3-2
+## [41] stringi_1.1.7    lazyeval_0.2.1   munsell_0.5.0    broom_0.5.0     
+## [45] crayon_1.3.4
 ```
 ### Load libraries
 
@@ -172,6 +175,14 @@ for (yrmo in seq(201801,201812)){
 ```
 
 ```r
+  Nov2018=fread("201811-fordgobike-tripdata.csv") ;   file.remove("201811-fordgobike-tripdata.csv")
+```
+
+```
+## [1] TRUE
+```
+
+```r
   #expand to include future months when available
 ```
 ### Combine all data into one data table.
@@ -180,7 +191,7 @@ for (yrmo in seq(201801,201812)){
 FGB=rbindlist(list(FGB2017,
                    Jan2018,Feb2018,Mar2018,
                    Apr2018,May2018,Jun2018,
-                   Jul2018,Aug2018,Sep2018,Oct2018),fill=T)
+                   Jul2018,Aug2018,Sep2018,Oct2018,Nov2018),fill=T)
 rm(list=c('FGB2017',
           'Jan2018',
           'Feb2018',
@@ -190,7 +201,8 @@ rm(list=c('FGB2017',
           'Jul2018',
           'Aug2018',
           'Sep2018',
-          'Oct2018'
+          'Oct2018',
+          'Nov2018'
 ))
 
 #expand to include future months when available
@@ -227,11 +239,11 @@ Stations
 ##   4:          3 1b13a386-c5f4-42cc-bc3b-ded95982e090
 ##   5:          4 a00d04e6-0159-466a-b3ab-23f9550f418c
 ##  ---                                                
-## 642:        380 175541bb-0ac6-42ba-bb50-071317d1237b
-## 643:        381 2c3d0e1d-f278-48df-b887-4723d4bcbefe
-## 644:        381 2c3d0e1d-f278-48df-b887-4723d4bcbefe
-## 645:        383 63758c7b-dfd9-4548-92a2-28fe8efb2faa
-## 646:        383 63758c7b-dfd9-4548-92a2-28fe8efb2faa
+## 640:        380 175541bb-0ac6-42ba-bb50-071317d1237b
+## 641:        381 2c3d0e1d-f278-48df-b887-4723d4bcbefe
+## 642:        381 2c3d0e1d-f278-48df-b887-4723d4bcbefe
+## 643:        383 63758c7b-dfd9-4548-92a2-28fe8efb2faa
+## 644:        383 63758c7b-dfd9-4548-92a2-28fe8efb2faa
 ##                                              name short_name      lat
 ##   1:                        Laguna St at Hayes St     SF-J21 37.77643
 ##   2:                        Laguna St at Hayes St     SF-J21 37.77643
@@ -239,11 +251,11 @@ Stations
 ##   4: Powell St BART Station (Market St at 4th St)     SF-G27 37.78638
 ##   5:                  Cyril Magnin St at Ellis St     SF-G26 37.78588
 ##  ---                                                                 
-## 642:                       Masonic Ave at Turk St     SF-I16 37.77919
-## 643:                        20th St at Dolores St     SF-P21 37.75824
-## 644:                        20th St at Dolores St     SF-P21 37.75824
-## 645:               Golden Gate Ave at Franklin St     SF-I22 37.78079
-## 646:               Golden Gate Ave at Franklin St     SF-I22 37.78079
+## 640:                       Masonic Ave at Turk St     SF-I16 37.77919
+## 641:                        20th St at Dolores St     SF-P21 37.75824
+## 642:                        20th St at Dolores St     SF-P21 37.75824
+## 643:               Golden Gate Ave at Franklin St     SF-I22 37.78079
+## 644:               Golden Gate Ave at Franklin St     SF-I22 37.78079
 ##            lon region_id rental_methods capacity
 ##   1: -122.4262         3            KEY       27
 ##   2: -122.4262         3     CREDITCARD       27
@@ -251,11 +263,11 @@ Stations
 ##   4: -122.4049         3     CREDITCARD       35
 ##   5: -122.4089         3            KEY       35
 ##  ---                                            
-## 642: -122.4473        NA     CREDITCARD        0
-## 643: -122.4261         3            KEY       27
-## 644: -122.4261         3     CREDITCARD       27
-## 645: -122.4219        NA            KEY        0
-## 646: -122.4219        NA     CREDITCARD        0
+## 640: -122.4473        NA     CREDITCARD        0
+## 641: -122.4261         3            KEY       27
+## 642: -122.4261         3     CREDITCARD       27
+## 643: -122.4219        NA            KEY        0
+## 644: -122.4219        NA     CREDITCARD        0
 ##                                                    rental_url
 ##   1:  http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=74
 ##   2:  http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=74
@@ -263,11 +275,11 @@ Stations
 ##   4:   http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=3
 ##   5:   http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=4
 ##  ---                                                         
-## 642: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=380
-## 643: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=381
-## 644: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=381
-## 645: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=383
-## 646: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=383
+## 640: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=380
+## 641: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=381
+## 642: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=381
+## 643: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=383
+## 644: http://app.fordgobike.com/Z6gL/SiFlGfIOTF?station_id=383
 ##      eightd_has_key_dispenser eightd_station_services has_kiosk
 ##   1:                    FALSE                  <list>      TRUE
 ##   2:                    FALSE                  <list>      TRUE
@@ -275,11 +287,11 @@ Stations
 ##   4:                    FALSE                              TRUE
 ##   5:                    FALSE                              TRUE
 ##  ---                                                           
-## 642:                    FALSE                             FALSE
-## 643:                    FALSE                              TRUE
-## 644:                    FALSE                              TRUE
-## 645:                    FALSE                             FALSE
-## 646:                    FALSE                             FALSE
+## 640:                    FALSE                             FALSE
+## 641:                    FALSE                              TRUE
+## 642:                    FALSE                              TRUE
+## 643:                    FALSE                             FALSE
+## 644:                    FALSE                             FALSE
 ```
 
 ```r
