@@ -20,3 +20,5 @@ Origins & Destinations: https://github.com/lepealec/Ford-GoBike/blob/master/Visu
 
 Intra-City Ride Counts: https://github.com/lepealec/Ford-GoBike/blob/master/Visualizations3.md
 
+Interactive Visualizations: https://github.com/lepealec/Ford-GoBike/blob/master/Interactive_Graph.html
+(You may need to download the html and open it locally)
