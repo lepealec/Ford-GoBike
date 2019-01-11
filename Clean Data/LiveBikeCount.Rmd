@@ -1,0 +1,111 @@
+---
+title: "Ford Go-Bike Live Bike Count"
+date: "Updated: 12/23/2018"
+output: html_document
+runtime: shiny
+---
+
+``` {r load_base_functions,echo=FALSE,message=FALSE} 
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1)
+knitr::opts_chunk$set(fig.width = 50, fig.length=50, fig.asp = 1,  message=FALSE)
+```
+
+``` {r load, include=FALSE}
+library(anytime)
+library(shiny)
+library(DT)
+library(data.table)
+library(leaflet)
+library(tidyverse)
+library("RCurl")
+library("rvest")
+library('lubridate')
+library("jsonlite")
+load("livebikecount.RData")
+```
+
+```{r api requestion}
+url=paste0("https://gbfs.fordgobike.com/gbfs/en/station_status.json")
+fn=paste0(paste0(strsplit(ac(Sys.time()),split=" ")[[1]][1]," ",
+                 paste0(strsplit(strsplit(ac(Sys.time()),split=" ")[[1]][2],split=":")[[1]],collapse="."),collapse=" ")
+)
+date=strsplit(fn,"\\ ")[[1]][1]
+day=wday(as.Date(date,"%Y-%m-%d"),T)
+time=strsplit(fn,"\\ ")[[1]][2]
+a=read_json(url)
+stations=a[[3]]$stations
+names=lapply(stations,function(x) names(ul(x)))
+names=unique(names)
+nz=names[which(ul(lapply(names,length))==max(ul(lapply(names,length))))]
+st=matrix(ncol=length(nz[[1]]),nrow=0)
+colnames(st)=nz[[1]]
+for (i in seq(1,length(stations))){
+  y=(ul(stations[[i]]))
+  st=rbind(st,rep("NA",ncol(st)))
+  st[nr(st),names(y)]=y
+}
+st=as.data.table(st)
+m=merge(st,st1,all.x=T)
+m=m[!is.na(m[["city"]]),]
+m[["last_reported"]]=anytime(as.numeric(m[["last_reported"]]))
+m=m[,!"eightd_active_station_services.id"]
+m=m[,!"eightd_has_available_keys"]
+```
+
+Refresh page to update.
+
+### Update Date / Time
+``` {r}
+renderPrint(cat(paste(as.vector(day),date,time)))
+```
+
+``` {r generatedata}
+t1=m[,sum(an(num_bikes_available)),city];t2=m[,sum(an(num_ebikes_available)),city]
+c1="Available Bikes";c2="Available eBikes"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t1,t2)
+
+t1=m[,sum(an(num_docks_available)),city];t2=m[,sum(an(num_bikes_disabled)),city]
+c1="Available Docks";c2="Disabled Bikes"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t3,t1);t3=merge(t3,t2)
+
+t1=m[,sum(an(num_docks_disabled)),city];t2=m[,sum(an(is_installed)),city]
+c1="Disabled Docks";c2="Installed Stations"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t3,t1);t3=merge(t3,t2)
+
+t1=m[,sum(an(is_renting)),city];t2=m[,sum(an(is_returning)),city]
+c1="Renting Stations";c2="Returning Stations"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t3,t1);t3=merge(t3,t2)
+
+t3=rbindlist(list(t3,adt(t(adt(c("All",
+                                 sum(t3[[2]]),
+                                 sum(t3[[3]]),
+                                 sum(t3[[4]]),
+                                 sum(t3[[5]]),
+                                 sum(t3[[6]]),
+                                 sum(t3[[7]]),
+                                 sum(t3[[8]]),
+                                 sum(t3[[9]])
+                                 ))))))
+colnames(t3)[1]="City"
+```
+
+### City Level Statistics
+``` {r}
+mode(t3[[2]])='numeric';mode(t3[[3]])='numeric';mode(t3[[4]])='numeric';mode(t3[[5]])='numeric';mode(t3[[6]])='numeric';mode(t3[[7]])='numeric';mode(t3[[8]])='numeric';mode(t3[[9]])='numeric'
+renderDataTable(t3)
+```
+
+### Entire Data Base
+``` {r}
+mode(m[[1]])='numeric';mode(m[[2]])='numeric';mode(m[[3]])='numeric';mode(m[[4]])='numeric';mode(m[[5]])='numeric';mode(m[[6]])='numeric';mode(m[[7]])='numeric';mode(m[[8]])='numeric';mode(m[[9]])='numeric';mode(m[[13]])='numeric';mode(m[[14]])='numeric';mode(m[[15]])='numeric'
+renderDataTable(m)
+```
+
+
+Ford Go-Bike Map: https://dieteto.shinyapps.io/FGBMaps/
+
+API Source: https://gbfs.fordgobike.com/gbfs/en/station_status.json

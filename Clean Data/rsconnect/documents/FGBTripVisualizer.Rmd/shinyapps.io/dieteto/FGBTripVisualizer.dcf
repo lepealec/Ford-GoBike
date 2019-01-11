@@ -1,0 +1,12 @@
+name: FGBTripVisualizer
+title: FGBTripVisualizer
+username:
+account: dieteto
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 624334
+bundleId: 1809896
+url: https://dieteto.shinyapps.io/FGBTripVisualizer/
+when: 1547248741.06956
+asMultiple: FALSE
+asStatic: FALSE

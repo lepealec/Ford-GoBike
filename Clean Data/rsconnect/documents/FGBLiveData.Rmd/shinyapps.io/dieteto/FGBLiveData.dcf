@@ -1,0 +1,12 @@
+name: FGBLiveData
+title: FGBLiveData
+username:
+account: dieteto
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 622694
+bundleId: 1809866
+url: https://dieteto.shinyapps.io/FGBLiveData/
+when: 1547247077.80197
+asMultiple: FALSE
+asStatic: FALSE

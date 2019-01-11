@@ -1,0 +1,12 @@
+name: GenLiveData
+title: GenLiveData
+username:
+account: dieteto
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 624060
+bundleId: 1786418
+url: https://dieteto.shinyapps.io/GenLiveData/
+when: 1545974088.62246
+asMultiple: FALSE
+asStatic: FALSE

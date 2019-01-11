@@ -1,0 +1,12 @@
+name: LiveBikeCount
+title: LiveBikeCount
+username:
+account: dieteto
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 622685
+bundleId: 1781401
+url: https://dieteto.shinyapps.io/LiveBikeCount/
+when: 1545635599.79264
+asMultiple: FALSE
+asStatic: FALSE

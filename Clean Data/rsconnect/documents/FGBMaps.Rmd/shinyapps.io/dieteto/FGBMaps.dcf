@@ -1,0 +1,12 @@
+name: FGBMaps
+title: FGBMaps
+username:
+account: dieteto
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 622678
+bundleId: 1785035
+url: https://dieteto.shinyapps.io/FGBMaps/
+when: 1545894525.52049
+asMultiple: FALSE
+asStatic: FALSE

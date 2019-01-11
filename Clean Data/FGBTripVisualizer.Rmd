@@ -1,0 +1,151 @@
+---
+title: "Ford GoBike Ride Visualizer"
+date: "Last Updated: 12/28/2018"
+output: html_document
+runtime: shiny
+---
+
+``` {r load_base_functions,echo=FALSE,message=FALSE} 
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1)
+knitr::opts_chunk$set(fig.width = 50, fig.length=50, fig.asp = 1,  message=FALSE)
+```
+
+```{r setup, include = FALSE}
+library("data.table")
+library("RCurl")
+library("tidyverse")
+library("skimr")
+library("ggplot2")
+library("lubridate")
+library("rjson")
+library(shiny)
+library("devtools")
+library(dygraphs)
+library(xts)
+knitr::opts_chunk$set(fig.width=8, fig.height=7)
+```
+``` {r load}
+cc=function(x,y="\\ "){
+  strsplit(x,y)[[1]]
+}
+
+###
+# setwd("~/Ford-GoBike/Clean Data")
+#  load("FGB.RData")
+# y=FGB[,length(bike_id),by=c('start_date','start city','end city','start_station_name','end_station_name')]
+# colnames(y)[ncol(y)]="Total Rides"
+# y=y[y[["start_station_name"]]!="NULL",]
+# y=y[y[["start city"]]!="NA",]
+# y=y[y[["end city"]]!="NA",]
+# 
+# yx=FGB[,length(bike_id),by=c('start_date','start city','end city')]
+# colnames(yx)[ncol(yx)]="Total Rides"
+# yx=yx[yx[["start city"]]!="<NA>",]
+# yx=yx[yx[["end city"]]!="<NA>",]
+# 
+# x=FGB[,length(bike_id),by=.(start_date)]
+# x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+# colnames(x)[2]="Total Rides"
+# x[["start_date"]]
+# x[["Daytype"]]=as.character(wday(x[["start_date"]],T))
+# yx[["Daytype"]]=as.character(wday(yx[["start_date"]],T))
+# y[["Daytype"]]=as.character(wday(y[["start_date"]],T))
+# save(x,y,yx,file="FGB2.RDAta")
+###
+
+#setwd("~/Ford-GoBike/Clean Data")
+load("FGB2.RData")
+#x date total rides
+#y date cit city name name total rides
+#yx date, city, city, rides
+load("stations.RData")
+
+# stations ID Name City
+# stations=unique(as.data.table(cbind(FGB[["start_station_id"]],FGB[["start_station_name"]],FGB[['start city']])))
+# stations=stations[stations[[1]]!="NULL",]
+# stations=stations[stations[[3]]!="<NA>",]
+# colnames(stations)=c("StationID","Name","City")
+# stations=stations[order(stations[["City"]],stations[["StationID"]]),]
+#save(stations,file="Stations.RData")
+cities=unique(stations[["City"]])
+wellPanel(
+radioButtons("Show","Show Station Library",c("Yes","No"),inline=T,selected = "No"),
+checkboxGroupInput("Daytype", "Day Type(s)",wday(seq(1,7),T),selected=wday(seq(2,6),T),inline=T),
+radioButtons("Type","Trip Type",cc("Intra Cities-Origins-Destinations-Specific OD","-"))
+)
+
+wellPanel(
+ conditionalPanel(
+   condition="input.Type=='Intra Cities'",
+ checkboxGroupInput("IntraOriginCities","Origin Cities",cities,selected="San Francisco",inline=T)),
+ conditionalPanel(
+   condition="input.Type=='Intra Cities'",
+ checkboxGroupInput("IntraDestinationCities","Destination Cities",cities,selected="San Francisco",inline=T)),
+  conditionalPanel(
+   condition="input.Type=='Origins'",
+ checkboxGroupInput("OriginStations","Origin Stations",stations[["Name"]],"Bancroft Way at Telegraph Ave",inline=T)),
+  conditionalPanel(
+   condition="input.Type=='Destinations'",
+ checkboxGroupInput("DestinationStations","Destination Station(s)",stations[["Name"]],"Downtown Berkeley BART",inline=T)),
+  conditionalPanel(
+   condition="input.Type=='Specific OD'",
+ selectInput("SOrigin","Origin",stations[["Name"]],"Bancroft Way at Telegraph Ave")),
+  conditionalPanel(
+   condition="input.Type=='Specific OD'",
+ selectInput("SDestination","Destination",stations[["Name"]],"Downtown Berkeley BART"))
+)
+
+ShowStations=reactive({
+  if (input$Show=="Yes"){
+    return(stations)
+  }
+})
+renderDataTable(ShowStations())
+SelectData=reactive({
+  if (input$Type=="Intra Cities"){
+    return(yx[yx[["Daytype"]] %in% input$Daytype & 
+                yx[["start city"]] %in% input$IntraOriginCities &
+                yx[["end city"]] %in% input$IntraDestinationCities,])
+    m=yx[yx[["Daytype"]] %in% "Wed" & 
+                yx[["start city"]] %in% c("Berkeley","Oakland") &
+                yx[["end city"]] %in% c("Berkeley","Oakland"),]
+  }
+  if (input$Type=="Origins"){
+    return(y[y[["Daytype"]] %in% input$Daytype & 
+                y[["start_station_name"]] %in% input$OriginStations,])
+  }
+  if (input$Type=="Destinations"){
+    return(y[y[["Daytype"]] %in% input$Daytype & 
+                y[["end_station_name"]] %in% input$DestinationStations,])
+  }
+  if (input$Type=="Specific OD"){
+    return(y[y[["Daytype"]] %in% input$Daytype & 
+                y[["start_station_name"]] %in% input$SOrigin &
+                y[["end_station_name"]] %in% input$SDestination,])
+  }
+})
+graphdata=function(x){
+  m=x
+  m=m[,!"start city"]
+  m=m[,!"end city"]
+  m=m[,!"Daytype"]
+  m=m[,!"start_station_name"]
+  m=m[,!"end_station_name"]
+  m=m[,sum(`Total Rides`),c("start_date")]
+  ind=m[["start_date"]]
+  m=m[,!"start_date"]
+  out=xts(m,ymd(ind))
+  colnames(out)="Total Trips"
+  y=dygraph(out,main="Ford GoBike Bike Trips over Time") %>% dyRangeSelector()
+  return(y)
+}
+```
+
+``` {r total_bikeship}
+# renderDataTable(SelectData())
+renderDygraph(graphdata(SelectData()))
+```
+
+Source: https://s3.amazonaws.com/fordgobike-data/index.html
+Questions? Comments? Bugs?
+Contact: alepe@bart.gov / lepealec518@gmail.com

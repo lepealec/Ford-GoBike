@@ -1,0 +1,39 @@
+---
+title: "Ford GoBike Ride Visualizer"
+date: "Last Updated: 12/27/2018"
+output: html_document
+runtime: shiny
+---
+
+``` {r load_base_functions,echo=FALSE,message=FALSE} 
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1)
+knitr::opts_chunk$set(fig.width = 50, fig.length=50, fig.asp = 1,  message=FALSE)
+```
+
+```{r setup, include = FALSE}
+library("data.table")
+library("RCurl")
+library("tidyverse")
+library("skimr")
+library("ggplot2")
+library("lubridate")
+library("rjson")
+library(shiny)
+library("devtools")
+library(dygraphs)
+library(xts)
+knitr::opts_chunk$set(fig.width=8, fig.height=7)
+```
+``` {r load}
+setwd("~/Ford-GoBike/Clean Data")
+load("FGB.RData")
+```
+
+``` {r total_bikeship}
+x=FGB[,length(bike_id),by=.(start_date)]
+x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+colnames(x)[2]="Total Rides"
+x=x[order(x[["start_date"]]),]
+y=xts(x,x[["start_date"]])
+dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
+```

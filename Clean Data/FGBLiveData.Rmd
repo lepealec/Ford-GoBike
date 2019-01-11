@@ -1,0 +1,201 @@
+---
+title: "Ford GoBike Live Bike Count"
+date: "Last Updated: 12/27/2018"
+output: html_document
+runtime: shiny
+---
+
+``` {r load_base_functions,echo=FALSE,message=FALSE} 
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1)
+knitr::opts_chunk$set(fig.width = 50, fig.length=50, fig.asp = 1,  message=FALSE)
+```
+
+``` {r load, include=FALSE}
+library("rdrop2")
+library(anytime)
+library(shiny)
+library(DT)
+library(data.table)
+library(leaflet)
+library(tidyverse)
+library("RCurl")
+library("rvest")
+library('lubridate')
+library("jsonlite")
+rm(list=ls())
+setwd("~/Ford-GoBIke/Clean Data")
+load("livebikecount.RData")
+```
+
+```{r apirequest, include=FALSE}
+url=paste0("https://gbfs.fordgobike.com/gbfs/en/station_status.json")
+fn=paste0(paste0(strsplit(ac(now("GMT8")),split=" ")[[1]][1]," ",
+                 paste0(strsplit(strsplit(ac(now("GMT8")),split=" ")[[1]][2],split=":")[[1]],collapse="."),collapse=" ")
+)
+date=strsplit(fn,"\\ ")[[1]][1]
+day=wday(as.Date(date,"%Y-%m-%d"),T)
+time=strsplit(fn,"\\ ")[[1]][2]
+a=read_json(url)
+g=ymd_hms(Sys.time()+8*60*60)
+stations=a[[3]]$stations
+names=lapply(stations,function(x) names(unlist(x)))
+names=unique(names)
+nz=names[which(unlist(lapply(names,length))==max(unlist(lapply(names,length))))]
+st=matrix(ncol=length(nz[[1]]),nrow=0)
+colnames(st)=nz[[1]]
+for (i in seq(1,length(stations))){
+  y=(unlist(stations[[i]]))
+  st=rbind(st,rep("NA",ncol(st)))
+  st[nrow(st),names(y)]=y
+}
+st=as.data.table(st)
+m=merge(st,st1,all.x=T)
+m=m[!is.na(m[["city"]]),]
+#m[["last_reported"]]=anytime(as.numeric(m[["last_reported"]])-0*8*60*60,"GMT8")
+m[["last_reported_ymd_hms"]]=lapply(anytime(as.numeric(m[["last_reported"]])-8*0*60*60,"GMT8"),function(x) paste(strsplit(as.character(x)," ")[[1]][1:2],collapse=" "))
+#m[["last_reported"]]=anytime(m[["last_reported"]]))
+m=m[,!"eightd_active_station_services.id"]
+m=m[,!"eightd_has_available_keys"]
+```
+
+Refresh page to update.
+
+### Update Date / Time
+``` {r}
+g=paste(as.vector(day),date,time)
+renderPrint(cat(g))
+```
+
+``` {r generatedata,results='hide', message=FALSE, warning=FALSE}
+t1=m[,sum(an(num_bikes_available)),city];t2=m[,sum(an(num_ebikes_available)),city]
+c1="Available Non eBikes";c2="Available eBikes"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t1,t2)
+t3[["Total Available Bikes"]]=as.numeric(t3[[c1]])+as.numeric(t3[[c2]])
+
+t1=m[,sum(an(num_docks_available)),city];t2=m[,sum(an(num_bikes_disabled)),city]
+c1="Available Docks";c2="Disabled Bikes"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t3,t1);t3=merge(t3,t2)
+
+t1=m[,sum(an(num_docks_disabled)),city];t2=m[,sum(an(is_installed)),city]
+c1="Disabled Docks";c2="Installed Stations"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t3,t1);t3=merge(t3,t2)
+
+t1=m[,sum(an(is_renting)),city];t2=m[,sum(an(is_returning)),city]
+c1="Renting Stations";c2="Returning Stations"
+colnames(t1)[2]=c1;colnames(t2)[2]=c2
+t3=merge(t3,t1);t3=merge(t3,t2)
+t3=rbindlist(list(t3,adt(t(adt(c("All",
+                                 sum(t3[[2]]),
+                                 sum(t3[[3]]),
+                                 sum(t3[[4]]),
+                                 sum(t3[[5]]),
+                                 sum(t3[[6]]),
+                                 sum(t3[[7]]),
+                                 sum(t3[[8]]),
+                                 sum(t3[[9]]),
+                                 sum(t3[[10]])
+                                 ))))))
+mode(t3[[2]])='numeric';mode(t3[[3]])='numeric';mode(t3[[4]])='numeric';mode(t3[[5]])='numeric';mode(t3[[6]])='numeric';mode(t3[[7]])='numeric';mode(t3[[8]])='numeric';mode(t3[[9]])='numeric';mode(t3[[10]])='numeric'
+
+colnames(t3)[1]="City"
+
+yx=m[num_ebikes_available>=1 & is_installed==1 & is_renting==1 & is_returning==1,length(num_docks_available),city]
+colnames(yx)=c("City","eBike Stations")
+t3=merge(t3,yx,all.x=T)
+t3[is.na(t3[["eBike Stations"]]),][["eBike Stations"]]=0
+t3[1,][["eBike Stations"]]=sum(t3[["eBike Stations"]])
+
+yx=m[num_docks_available==0 & is_installed==1 & is_renting==1 & is_returning==1,length(num_docks_available),city]
+colnames(yx)=c("City","Full Stations")
+t3=merge(t3,yx,all.x=T)
+t3[is.na(t3[["Full Stations"]]),][["Full Stations"]]=0
+t3[1,][["Full Stations"]]=sum(t3[["Full Stations"]])
+
+yx=m[is_installed==1 & is_renting==1 & is_returning==1,sum(as.numeric(capacity)),city]
+colnames(yx)=c("City","Total Capacity")
+t3=merge(t3,yx,all.x=T)
+t3[is.na(t3[["Total Capacity"]]),][["Total Capacity"]]=0
+t3[1,][["Total Capacity"]]=sum(t3[["Total Capacity"]])
+```
+
+### City Level Statistics
+``` {r}
+renderDataTable(t3)
+```
+
+### Full & Active Stations
+
+``` {r}
+rx=m
+m=rx
+mode(m[[1]])='numeric';mode(m[[2]])='numeric';mode(m[[3]])='numeric';mode(m[[4]])='numeric';mode(m[[5]])='numeric';mode(m[[6]])='numeric';mode(m[[7]])='numeric';mode(m[[8]])='numeric';mode(m[[9]])='numeric';mode(m[[13]])='numeric';mode(m[[14]])='numeric';mode(m[[15]])='numeric'
+m[["temp"]]=m[["station_id"]]
+m[["station_id"]]=m[["name"]]
+m=m[,!"name"]
+colnames(m)[1]="name"
+colnames(m)[ncol(m)]="station_id"
+m=m[order(m[["name"]]),]
+t4=m[m[["num_docks_available"]]==0 & m[["is_installed"]]==1 & m[["is_renting"]]==1 & m[["is_returning"]]==1,]
+t4=t4[order(t4[["city"]],t4[["name"]]),]
+t5=m[(an(m[["num_bikes_available"]])+an(m[["num_ebikes_available"]]))==0 & m[["is_installed"]]==1 & m[["is_renting"]]==1 & m[["is_returning"]]==1,]
+t5=t5[order(t5[["city"]],t5[["name"]]),]
+renderDataTable(t4)
+```
+
+### Emtpy & Active Stations
+
+``` {r}
+renderDataTable(t5)
+```
+
+### Entire Database
+``` {r}
+renderDataTable(m)
+```
+
+### Partially Inactive or Non Installed Stations
+``` {r a1}
+mx=m[m[["is_installed"]]!=1 | m[["is_renting"]]!=1 | m[["is_returning"]]!=1,]
+renderDataTable(mx)
+```
+
+``` {r}
+output$m <- downloadHandler(
+   filename = function() {
+     paste(g,"FGB Database.csv")
+   },
+   content = function(con) {
+     write.csv(m, con)
+   }
+ )
+output$mx <- downloadHandler(
+   filename = function() {
+     paste(g,"FGB Inactive / Partially Open Database.csv")
+   },
+   content = function(con) {
+     write.csv(mx, con)
+   }
+ )
+output$t3 <- downloadHandler(
+   filename = function() {
+     paste(g,"FGB Summarized Database.csv")
+   },
+   content = function(con) {
+     write.csv(t3, con)
+   }
+ )
+```
+``` {r}
+downloadLink('t3', 'Download Summarized Database ')
+downloadLink('m', 'Download Entire Database ')
+downloadLink('mx', 'Download Inactive / Partially Open Database ')
+```
+
+Ford GoBike Map: https://dieteto.shinyapps.io/FGBMaps/
+API Source: https://gbfs.fordgobike.com/gbfs/en/station_status.json
+Questions? Comments? Bugs?
+Contact: alepe@bart.gov / lepealec518@gmail.com
+

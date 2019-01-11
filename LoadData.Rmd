@@ -50,6 +50,7 @@ FGB2017=fread("https://s3.amazonaws.com/fordgobike-data/2017-fordgobike-tripdata
 ```{r load_2018}
 setwd("~/Ford-GoBike")
 for (yrmo in seq(201801,201812)){
+  #yrmo=201812
   link=paste0("https://s3.amazonaws.com/fordgobike-data/",yrmo,"-fordgobike-tripdata.csv.zip")
   zip=strsplit(link,"/")[[1]][5]
   csv=paste(strsplit(zip,"\\.")[[1]][1:2],collapse=".")
@@ -71,7 +72,7 @@ for (yrmo in seq(201801,201812)){
   Sep2018=fread("201809-fordgobike-tripdata.csv") ;   file.remove("201809-fordgobike-tripdata.csv")
   Oct2018=fread("201810-fordgobike-tripdata.csv") ;   file.remove("201810-fordgobike-tripdata.csv")
   Nov2018=fread("201811-fordgobike-tripdata.csv") ;   file.remove("201811-fordgobike-tripdata.csv")
-
+  Dec2018=fread("201812-fordgobike-tripdata.csv") ;   file.remove("201812-fordgobike-tripdata.csv")
   #expand to include future months when available
 ```
 ### Combine all data into one data table.
@@ -79,7 +80,7 @@ for (yrmo in seq(201801,201812)){
 FGB=rbindlist(list(FGB2017,
                    Jan2018,Feb2018,Mar2018,
                    Apr2018,May2018,Jun2018,
-                   Jul2018,Aug2018,Sep2018,Oct2018,Nov2018),fill=T)
+                   Jul2018,Aug2018,Sep2018,Oct2018,Nov2018,Dec2018),fill=T)
 rm(list=c('FGB2017',
           'Jan2018',
           'Feb2018',
@@ -90,7 +91,8 @@ rm(list=c('FGB2017',
           'Aug2018',
           'Sep2018',
           'Oct2018',
-          'Nov2018'
+          'Nov2018',
+          'Dec2018'
 ))
 
 #expand to include future months when available

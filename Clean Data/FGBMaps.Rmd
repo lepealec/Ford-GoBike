@@ -1,0 +1,67 @@
+---
+title: "Ford GoBike Maps"
+date: "Last Updated: 12/27/2018"
+output: html_document
+runtime: shiny
+---
+
+``` {r load_base_functions,echo=FALSE,message=FALSE} 
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1)
+knitr::opts_chunk$set(fig.width = 50, fig.length=50, fig.asp = 1,  message=FALSE)
+```
+
+``` {r load, include=FALSE}
+library(shiny)
+library(DT)
+library(dygraphs)
+library(xts)
+library(data.table)
+library(leaflet)
+library("tidyverse")
+#setwd("~/Ford-GoBIke/Clean Data")
+load("maps.RData")
+# load("FGB.RData")
+```
+
+```{r clean}
+# colnames(FGB)[colnames(FGB)=="start city"]="start_city"
+# colnames(FGB)[colnames(FGB)=="end city"]="end_city"
+# FGB_lon_lat=FGB %>% select(start_station_name,start_city,start_station_longitude,start_station_latitude,start_station_id)
+# FGB_lon_lat=unique(FGB_lon_lat)
+# FGB_lon_lat=FGB_lon_lat[FGB_lon_lat[["start_station_name"]]!="NULL",]
+# FGB_lon_lat=FGB_lon_lat[!is.na(FGB_lon_lat[["start_city"]]),]
+# FGB_lon_lat=FGB_lon_lat[!duplicated(FGB_lon_lat[["start_station_id"]]),]
+```
+
+### All
+``` {r}
+renderLeaflet(all)
+```
+
+### San Francisco
+``` {r}
+renderLeaflet(sf)
+```
+
+### Oakland
+``` {r}
+renderLeaflet(oak)
+```
+
+### Berkeley
+``` {r}
+renderLeaflet(berk)
+```
+
+### Emeryville
+``` {r}
+renderLeaflet(emery)
+```
+
+### San Jose
+``` {r}
+renderLeaflet(sj)
+```
+
+Questions? Comments? Bugs?
+Contact: alepe@bart.gov / lepealec518@gmail.com

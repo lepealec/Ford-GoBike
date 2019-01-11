@@ -24,20 +24,20 @@ abs
 ```
 
 ```
-##                   Berkeley  Emeryville Oakland   San Francisco San Jose
-## Berkeley          "119,888" "5,733"    "19,739"  "15"          "0"     
-## Emeryville        "3,770"   "6,321"    "7,652"   "15"          "0"     
-## Oakland           "15,218"  "9,446"    "272,561" "70"          "2"     
-## San Francisco     "8"       "5"        "28"      "1,618,251"   "1"     
-## San Jose          "0"       "0"        "0"       "1"           "98,079"
-## Destination Total "138,884" "21,505"   "299,980" "1,618,352"   "98,082"
+##                   Berkeley  Emeryville Oakland   San Francisco San Jose 
+## Berkeley          "128,615" "6,224"    "20,900"  "15"          "0"      
+## Emeryville        "4,092"   "6,723"    "8,145"   "15"          "0"      
+## Oakland           "16,175"  "10,008"   "286,407" "76"          "2"      
+## San Francisco     "8"       "5"        "31"      "1,714,976"   "1"      
+## San Jose          "0"       "0"        "0"       "1"           "105,023"
+## Destination Total "148,890" "22,960"   "315,483" "1,715,083"   "105,026"
 ##                   Origin Total
-## Berkeley          "145,375"   
-## Emeryville        "17,758"    
-## Oakland           "297,297"   
-## San Francisco     "1,618,293" 
-## San Jose          "98,080"    
-## Destination Total "2,176,803"
+## Berkeley          "155,754"   
+## Emeryville        "18,975"    
+## Oakland           "312,668"   
+## San Francisco     "1,715,021" 
+## San Jose          "105,024"   
+## Destination Total "2,307,442"
 ```
 Note: Rows=Origins, Columns=Destinations
 
@@ -60,19 +60,19 @@ rel
 
 ```
 ##                   Berkeley Emeryville Oakland San Francisco San Jose
-## Berkeley             0.055      0.003   0.009         0.000    0.000
+## Berkeley             0.056      0.003   0.009         0.000    0.000
 ## Emeryville           0.002      0.003   0.004         0.000    0.000
-## Oakland              0.007      0.004   0.125         0.000    0.000
+## Oakland              0.007      0.004   0.124         0.000    0.000
 ## San Francisco        0.000      0.000   0.000         0.743    0.000
-## San Jose             0.000      0.000   0.000         0.000    0.045
-## Destination Total    0.064      0.010   0.138         0.743    0.045
+## San Jose             0.000      0.000   0.000         0.000    0.046
+## Destination Total    0.065      0.010   0.137         0.743    0.046
 ##                   Origin Total
-## Berkeley                 0.067
+## Berkeley                 0.068
 ## Emeryville               0.009
-## Oakland                  0.136
+## Oakland                  0.135
 ## San Francisco            0.743
-## San Jose                 0.045
-## Destination Total        1.000
+## San Jose                 0.046
+## Destination Total        1.001
 ```
 Note: Rows=Origins, Columns=Destinations
 
@@ -114,72 +114,72 @@ x1;x2;x3;x4;x5
 
 ```
 ##                                                                                    San Francisco
-## San Francisco Ferry Building (Harry Bridges Plaza) , The Embarcadero at Sansome St         10551
-## The Embarcadero at Sansome St , Steuart St at Market St                                     6297
-## Berry St at 4th St , San Francisco Ferry Building (Harry Bridges Plaza)                     5956
-## The Embarcadero at Sansome St , San Francisco Ferry Building (Harry Bridges Plaza)          5313
-## San Francisco Ferry Building (Harry Bridges Plaza) , Berry St at 4th St                     4460
-## Steuart St at Market St , The Embarcadero at Sansome St                                     4405
-## Market St at 10th St , San Francisco Caltrain Station 2  (Townsend St at 4th St)            3754
-## Howard St at Beale St , San Francisco Caltrain (Townsend St at 4th St)                      3702
-## The Embarcadero at Sansome St , The Embarcadero at Sansome St                               3611
-## Townsend St at 7th St , San Francisco Caltrain Station 2                                    3591
+## San Francisco Ferry Building (Harry Bridges Plaza) , The Embarcadero at Sansome St         10560
+## The Embarcadero at Sansome St , Steuart St at Market St                                     6368
+## Berry St at 4th St , San Francisco Ferry Building (Harry Bridges Plaza)                     6220
+## The Embarcadero at Sansome St , San Francisco Ferry Building (Harry Bridges Plaza)          5803
+## San Francisco Ferry Building (Harry Bridges Plaza) , Berry St at 4th St                     4470
+## Steuart St at Market St , The Embarcadero at Sansome St                                     4415
+## Market St at 10th St , San Francisco Caltrain Station 2  (Townsend St at 4th St)            3984
+## Townsend St at 7th St , San Francisco Caltrain Station 2  (Townsend St at 4th St)           3800
+## The Embarcadero at Sansome St , The Embarcadero at Sansome St                               3733
+## Howard St at Beale St , San Francisco Caltrain                                              3719
 ```
 
 ```
 ##                                                         Oakland
-## Grand Ave at Perkins St , 19th Street BART Station         5018
-## 19th Street BART Station , Bay Pl at Vernon St             4749
-## Bay Pl at Vernon St , 19th Street BART Station             4533
-## Lake Merritt BART Station , El Embarcadero at Grand Ave    2773
-## MacArthur BART Station , Webster St at 2nd St              2500
-## Broadway at 40th St , MacArthur BART Station               2142
-## 19th Street BART Station , Genoa St at 55th St             2116
-## 2nd Ave at E 18th St , 2nd Ave at E 18th St                2102
+## Grand Ave at Perkins St , 19th Street BART Station         5084
+## 19th Street BART Station , Bay Pl at Vernon St             4762
+## Bay Pl at Vernon St , 19th Street BART Station             4610
+## Lake Merritt BART Station , El Embarcadero at Grand Ave    2790
+## MacArthur BART Station , Webster St at 2nd St              2542
+## Broadway at 40th St , MacArthur BART Station               2165
+## 19th Street BART Station , Genoa St at 55th St             2121
+## 2nd Ave at E 18th St , 2nd Ave at E 18th St                2115
 ## 2nd Ave at E 18th St , College Ave at Harwood Ave          1992
-## Telegraph Ave at 27th St , Grand Ave at Webster St         1941
+## Telegraph Ave at 27th St , Grand Ave at Webster St         1952
 ```
 
 ```
 ##                                                               Berkeley
-## Bancroft Way at College Ave , Fulton St at Bancroft Way           3167
-## Bancroft Way at Telegraph Ave , Berkeley Civic Center             2578
-## College Ave at Alcatraz Ave , Bancroft Way at Telegraph Ave       1695
+## Bancroft Way at College Ave , Fulton St at Bancroft Way           3170
+## Bancroft Way at Telegraph Ave , Berkeley Civic Center             2587
+## Bancroft Way at College Ave , Ashby BART Station                  1791
+## College Ave at Alcatraz Ave , Bancroft Way at Telegraph Ave       1737
 ## Bancroft Way at College Ave , Milvia St at Derby St               1609
-## Bancroft Way at College Ave , Ashby BART Station                  1549
+## Ashby BART Station , Haste St at Telegraph Ave                    1376
 ## Derby St at College Ave , Bancroft Way at Telegraph Ave           1375
 ## Downtown Berkeley BART , Downtown Berkeley BART                   1197
-## Telegraph Ave at Ashby Ave , Downtown Berkeley BART               1151
-## Bancroft Way at Telegraph Ave , Ashby BART Station                1137
-## Bancroft Way at College Ave , California St at University Ave     1125
+## Parker St at Fulton St , Downtown Berkeley BART                   1172
+## Bancroft Way at College Ave , California St at University Ave     1153
 ```
 
 ```
-##                                                           San Jose
-## 5th St at Virginia St , San Fernando St at 4th St             1256
-## 5th St at Virginia St , San Fernando at 7th St                1240
-## San Fernando St at 4th St , 5th St at Virginia St             1220
-## San Fernando St at 4th St , Ryland Park                       1030
-## 5th St at Virginia St , San Salvador St at 9th St              995
-## Ryland Park , San Fernando St at 4th St                        926
-## San Jose Diridon Station , San Fernando St at 4th St           830
-## San Fernando at 7th St , 5th St at Virginia St                 808
-## San Salvador St at 9th St , 5th St at Virginia St              777
-## San Jose Diridon Station , Santa Clara St at Almaden Blvd      691
+##                                                                        San Jose
+## 5th St at Virginia St , San Fernando St at 4th St                          1476
+## San Fernando St at 4th St , 5th St at Virginia St                          1425
+## 5th St at Virginia St , San Fernando at 7th St                             1240
+## 5th St at Virginia St , San Salvador St at 9th St                          1095
+## San Fernando St at 4th St , Ryland Park                                    1089
+## Ryland Park , San Fernando St at 4th St                                     983
+## San Jose Diridon Station , San Fernando St at 4th St                        872
+## San Salvador St at 9th St , 5th St at Virginia St                           851
+## San Fernando at 7th St , 5th St at Virginia St                              808
+## 6th St at San Fernando St (Temporary Location) , 5th St at Virginia St      765
 ```
 
 ```
 ##                                                  Emeryville
-## Horton St at 40th St , 65th St at Hollis St             892
+## Horton St at 40th St , 65th St at Hollis St             939
 ## Horton St at 40th St , Horton St at 40th St             746
 ## Adeline St at 40th St , 47th St at San Pablo Ave        664
-## Emeryville Town Hall , 65th St at Hollis St             538
+## 65th St at Hollis St , Emeryville Public Market         592
+## Emeryville Town Hall , 65th St at Hollis St             531
+## Adeline St at 40th St , 59th St at Horton St            507
 ## 59th St at Horton St , Adeline St at 40th St            495
-## 47th St at San Pablo Ave , 65th St at Hollis St         490
-## Adeline St at 40th St , 59th St at Horton St            487
 ## 65th St at Hollis St , Adeline St at 40th St            473
-## 65th St at Hollis St , Emeryville Public Market         454
-## Emeryville Town Hall , Horton St at 40th St             433
+## Horton St at 40th St , 59th St at Horton St             473
+## 65th St at Hollis St , 65th St at Hollis St             460
 ```
 
 ```r
@@ -231,72 +231,72 @@ x1;x2;x3;x4;x5
 
 ```
 ##                                                           San Francisco
-## San Francisco Ferry Building (Harry Bridges Plaza)                51231
-## San Francisco Caltrain Station 2  (Townsend St at 4th St)         46868
-## San Francisco Caltrain (Townsend St at 4th St)                    45469
-## The Embarcadero at Sansome St                                     45169
-## Market St at 10th St                                              44330
-## Berry St at 4th St                                                42627
-## Montgomery St BART Station (Market St at 2nd St)                  41452
-## Powell St BART Station (Market St at 4th St)                      39518
-## Steuart St at Market St                                           35823
-## Howard St at Beale St                                             34739
+## San Francisco Ferry Building (Harry Bridges Plaza)                53648
+## San Francisco Caltrain Station 2  (Townsend St at 4th St)         49672
+## San Francisco Caltrain (Townsend St at 4th St)                    47638
+## The Embarcadero at Sansome St                                     47054
+## Market St at 10th St                                              46878
+## Berry St at 4th St                                                44672
+## Montgomery St BART Station (Market St at 2nd St)                  43465
+## Powell St BART Station (Market St at 4th St)                      41798
+## Steuart St at Market St                                           37714
+## Howard St at Beale St                                             36461
 ```
 
 ```
 ##                             Oakland
-## 19th Street BART Station      21081
-## MacArthur BART Station        15911
-## Lake Merritt BART Station     12518
-## Grand Ave at Perkins St       11773
-## El Embarcadero at Grand Ave   11750
-## Bay Pl at Vernon St           11199
-## Frank H Ogawa Plaza           11058
-## 2nd Ave at E 18th St          10629
-## Grand Ave at Webster St       10302
-## West Oakland BART Station      9757
+## 19th Street BART Station      21993
+## MacArthur BART Station        16604
+## Lake Merritt BART Station     13136
+## Grand Ave at Perkins St       12291
+## El Embarcadero at Grand Ave   12227
+## Bay Pl at Vernon St           11698
+## Frank H Ogawa Plaza           11593
+## 2nd Ave at E 18th St          11185
+## Grand Ave at Webster St       10764
+## West Oakland BART Station     10338
 ```
 
 ```
 ##                               Berkeley
-## Bancroft Way at College Ave      16503
-## Bancroft Way at Telegraph Ave    12028
-## Downtown Berkeley BART            9553
-## Ashby BART Station                8447
-## Haste St at Telegraph Ave         7017
-## Parker St at Fulton St            5701
-## Hearst Ave at Euclid Ave          5488
-## Berkeley Civic Center             5337
-## Telegraph Ave at Ashby Ave        4861
-## Derby St at College Ave           4583
+## Bancroft Way at College Ave      17262
+## Bancroft Way at Telegraph Ave    12734
+## Downtown Berkeley BART           10378
+## Ashby BART Station                9012
+## Haste St at Telegraph Ave         7389
+## Parker St at Fulton St            6070
+## Hearst Ave at Euclid Ave          5927
+## Berkeley Civic Center             5733
+## Telegraph Ave at Ashby Ave        5141
+## Derby St at College Ave           4861
 ```
 
 ```
 ##                                San Jose
-## San Fernando St at 4th St          8007
-## San Jose Diridon Station           7775
-## 5th St at Virginia St              6954
-## Ryland Park                        5552
-## San Salvador St at 9th St          4559
-## Julian St at The Alameda           3851
-## Paseo De San Antonio at 2nd St     3737
+## San Fernando St at 4th St          8707
+## San Jose Diridon Station           8106
+## 5th St at Virginia St              7735
+## Ryland Park                        5919
+## San Salvador St at 9th St          4877
+## Julian St at The Alameda           4203
+## Paseo De San Antonio at 2nd St     3990
+## The Alameda at Bush St             3671
 ## San Fernando at 7th St             3506
-## The Alameda at Bush St             3383
-## San Jose City Hall                 3291
+## San Jose City Hall                 3444
 ```
 
 ```
 ##                           Emeryville
-## 65th St at Hollis St            2670
-## Horton St at 40th St            2592
-## Adeline St at 40th St           2408
-## Emeryville Town Hall            1815
-## 59th St at Horton St            1791
-## Emeryville Public Market        1524
-## Doyle St at 59th St             1458
-## Stanford Ave at Hollis St       1451
-## 47th St at San Pablo Ave        1449
-## 53rd St at Hollis St             617
+## 65th St at Hollis St            2847
+## Horton St at 40th St            2755
+## Adeline St at 40th St           2554
+## 59th St at Horton St            1935
+## Emeryville Town Hall            1921
+## Emeryville Public Market        1696
+## Stanford Ave at Hollis St       1564
+## 47th St at San Pablo Ave        1541
+## Doyle St at 59th St             1531
+## 53rd St at Hollis St             674
 ```
 
 ```r
@@ -325,72 +325,72 @@ x1;x2;x3;x4;x5
 
 ```
 ##                                                           San Francisco
-## San Francisco Caltrain Station 2  (Townsend St at 4th St)         60304
-## San Francisco Ferry Building (Harry Bridges Plaza)                58410
-## San Francisco Caltrain (Townsend St at 4th St)                    57669
-## The Embarcadero at Sansome St                                     53435
-## Montgomery St BART Station (Market St at 2nd St)                  47207
-## Market St at 10th St                                              43009
-## Powell St BART Station (Market St at 4th St)                      41711
-## Berry St at 4th St                                                41330
-## Steuart St at Market St                                           35983
-## Powell St BART Station (Market St at 5th St)                      32651
+## San Francisco Caltrain Station 2  (Townsend St at 4th St)         63658
+## San Francisco Ferry Building (Harry Bridges Plaza)                61222
+## San Francisco Caltrain (Townsend St at 4th St)                    60348
+## The Embarcadero at Sansome St                                     55753
+## Montgomery St BART Station (Market St at 2nd St)                  49398
+## Market St at 10th St                                              45663
+## Powell St BART Station (Market St at 4th St)                      44150
+## Berry St at 4th St                                                43397
+## Steuart St at Market St                                           37913
+## Powell St BART Station (Market St at 5th St)                      34565
 ```
 
 ```
 ##                             Oakland
-## 19th Street BART Station      23200
-## MacArthur BART Station        17344
-## El Embarcadero at Grand Ave   13385
-## Grand Ave at Perkins St       12828
-## 2nd Ave at E 18th St          11580
-## Frank H Ogawa Plaza           11155
-## Bay Pl at Vernon St           10731
-## Grand Ave at Webster St       10357
-## West Oakland BART Station      9910
-## Lake Merritt BART Station      8900
+## 19th Street BART Station      24346
+## MacArthur BART Station        18219
+## El Embarcadero at Grand Ave   13962
+## Grand Ave at Perkins St       13355
+## 2nd Ave at E 18th St          12205
+## Frank H Ogawa Plaza           11696
+## Bay Pl at Vernon St           11218
+## Grand Ave at Webster St       10798
+## West Oakland BART Station     10538
+## Lake Merritt BART Station      9394
 ```
 
 ```
 ##                               Berkeley
-## Downtown Berkeley BART           13827
-## Bancroft Way at Telegraph Ave    10696
-## Ashby BART Station                9243
-## Parker St at Fulton St            6424
-## Berkeley Civic Center             6238
-## Bancroft Way at College Ave       5997
-## Haste St at Telegraph Ave         5338
-## Fulton St at Bancroft Way         5173
-## Telegraph Ave at Ashby Ave        4691
-## Addison St at Fourth St           4569
+## Downtown Berkeley BART           14750
+## Bancroft Way at Telegraph Ave    11333
+## Ashby BART Station                9928
+## Parker St at Fulton St            6843
+## Berkeley Civic Center             6649
+## Bancroft Way at College Ave       6225
+## Haste St at Telegraph Ave         5632
+## Fulton St at Bancroft Way         5479
+## Telegraph Ave at Ashby Ave        4956
+## Addison St at Fourth St           4855
 ```
 
 ```
 ##                                San Jose
-## San Fernando St at 4th St          8345
-## San Jose Diridon Station           7914
-## 5th St at Virginia St              6240
-## Ryland Park                        5354
-## San Salvador St at 9th St          4783
+## San Fernando St at 4th St          9055
+## San Jose Diridon Station           8225
+## 5th St at Virginia St              6981
+## Ryland Park                        5714
+## San Salvador St at 9th St          5128
+## Julian St at The Alameda           4233
+## Paseo De San Antonio at 2nd St     4166
 ## San Fernando at 7th St             3992
-## Paseo De San Antonio at 2nd St     3909
-## Julian St at The Alameda           3906
-## The Alameda at Bush St             3650
-## San Pedro Square                   3181
+## The Alameda at Bush St             3934
+## San Pedro Square                   3363
 ```
 
 ```
 ##                           Emeryville
-## 65th St at Hollis St            4059
-## Horton St at 40th St            2883
-## Adeline St at 40th St           2584
-## 59th St at Horton St            2231
-## Emeryville Public Market        1920
-## Emeryville Town Hall            1801
-## Stanford Ave at Hollis St       1758
-## 47th St at San Pablo Ave        1668
-## Doyle St at 59th St             1627
-## 53rd St at Hollis St             992
+## 65th St at Hollis St            4286
+## Horton St at 40th St            3051
+## Adeline St at 40th St           2766
+## 59th St at Horton St            2434
+## Emeryville Public Market        2155
+## Emeryville Town Hall            1907
+## Stanford Ave at Hollis St       1884
+## 47th St at San Pablo Ave        1776
+## Doyle St at 59th St             1727
+## 53rd St at Hollis St            1057
 ```
 
 ```r

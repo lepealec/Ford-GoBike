@@ -1,0 +1,86 @@
+---
+title: "Ford GoBike Live Bike Count"
+date: "Last Updated: 12/27/2018"
+output: html_document
+runtime: shiny
+---
+
+``` {r load_base_functions,echo=FALSE,message=FALSE} 
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1)
+knitr::opts_chunk$set(fig.width = 50, fig.length=50, fig.asp = 1,  message=FALSE)
+
+```
+
+``` {r load, include=FALSE}
+rm(list=ls())
+library("rdrop2")
+#token<-drop_auth()
+#saveRDS(token, "droptoken.rds")
+token <- readRDS("droptoken.rds")
+# Then pass the token to each drop_ function
+drop_acc(dtoken = token)
+# token<-drop_auth()
+# saveRDS(token, "droptoken.rds")
+
+library(anytime)
+library(shiny)
+library(DT)
+library(data.table)
+library(leaflet)
+library(tidyverse)
+library("RCurl")
+library("rvest")
+library('lubridate')
+library("jsonlite")
+#setwd("Ford-GoBIke/Clean Data")
+#load("livebikecount.RData")
+renderPrint("Collecting Data...")
+```
+
+```{r apirequest, include=FALSE}
+outputDir="Ford GoBike"
+saveData <- function(data,fn) {
+  data <- (data)
+  # Create a unique file name
+  fileName <- fn
+  sprintf("%s_%s.csv", as.integer(Sys.time()), digest::digest(data))
+  # Write the data to a temporary file locally
+  filePath <- file.path(tempdir(), fileName)
+  write.csv(data, filePath, row.names = FALSE, quote = TRUE)
+  # Upload the file to Dropbox
+  drop_upload(filePath, path = outputDir,dtoken=token)
+}
+while (T){
+url=paste0("https://gbfs.fordgobike.com/gbfs/en/station_status.json")
+  fn=paste0(paste0(strsplit(as.character(Sys.time()),split=" ")[[1]][1]," ",
+                   paste0(strsplit(strsplit(as.character(Sys.time()),split=" ")[[1]][2],split=":")[[1]],collapse="."),collapse=" ")
+            ,".csv")
+  fn2=strsplit(fn," ")[[1]][2]
+  fn3=paste(strsplit(fn2,"")[[1]][4:5],collapse="")
+  fn4=paste(strsplit(fn2,"")[[1]][7:8],collapse="")
+  go=(as.numeric(fn3) %in% seq(0,60,1)) & fn4=="00"
+  if (go){
+    a=read_json(url)
+    epoch=a[[1]]
+    stations=a[[3]]$stations
+    names=lapply(stations,function(x) names(unlist(x)))
+    names=unique(names)
+    nz=names[which(unlist(lapply(names,length))==max(unlist(lapply(names,length))))]
+    st=matrix(ncol=length(nz[[1]]),nrow=0)
+    colnames(st)=nz[[1]]
+    for (i in seq(1,length(stations))){
+      y=(unlist(stations[[i]]))
+      st=rbind(st,rep("NA",ncol(st)))
+      st[nrow(st),names(y)]=y
+    }
+    saveData(st,fn)
+    Sys.sleep(1*59)
+  }
+}
+```
+
+
+Ford GoBike Map: https://dieteto.shinyapps.io/FGBMaps/
+API Source: https://gbfs.fordgobike.com/gbfs/en/station_status.json
+Questions? Comments? Bugs?
+Contact: alepe@bart.gov / lepealec518@gmail.com
