@@ -32,3 +32,6 @@ https://dieteto.shinyapps.io/FGBLiveData/
 
 FGB Map:
 https://dieteto.shinyapps.io/FGBMaps/
+
+FGB Personal Trip History Data Cleaner:
+https://dieteto.shinyapps.io/FordGoBikeDataCleaner/
