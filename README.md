@@ -23,3 +23,12 @@ Intra-City Ride Counts: https://github.com/lepealec/Ford-GoBike/blob/master/Visu
 Interactive Visualizations: https://github.com/lepealec/Ford-GoBike/blob/master/Interactive_Graph.html
 
 (You may need to download the html and open it locally)
+
+Interactive Web App:
+https://dieteto.shinyapps.io/FGBTripvisualizer
+
+FGB Live Data:
+https://dieteto.shinyapps.io/FGBLiveData/
+
+FGB Map:
+https://dieteto.shinyapps.io/FGBMaps/
