@@ -5,8 +5,8 @@ account: dieteto
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 624334
-bundleId: 1809896
+bundleId: 1873425
 url: https://dieteto.shinyapps.io/FGBTripVisualizer/
-when: 1547248741.06956
+when: 1550041282.58917
 asMultiple: FALSE
 asStatic: FALSE

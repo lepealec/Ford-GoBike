@@ -1,7 +1,7 @@
 ---
 title: "Ford GoBike Data Visualization2"
 author: "Alec Lepe"
-date: "09/07/2018"
+date: "02/12/2018"
 output: 
   html_document:
     keep_md: true
@@ -18,12 +18,12 @@ knitr::opts_chunk$set(fig.width = 10, fig.length=10, fig.asp = 1/3,  message=FAL
 ```
 ### Load Data
 ```{r load}
-setwd("~/Ford-GoBike/Clean Data")
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
 load("FGB.RData")
 ```
 ```{r abs matrix}
-abs=table(FGB[["start city"]][!is.na(FGB[["start city"]]) & !is.na(FGB[["end city"]])],
-FGB[["end city"]][!is.na(FGB[["start city"]]) & !is.na(FGB[["end city"]])])
+abs=table(FGB[["StartCity"]][!is.na(FGB[["StartCity"]]) & !is.na(FGB[["EndCity"]])],
+FGB[["EndCity"]][!is.na(FGB[["StartCity"]]) & !is.na(FGB[["EndCity"]])])
 abs=cbind(abs,"Origin Total"=apply(abs,1,sum))
 abs=rbind(abs,"Destination Total"=apply(abs,2,sum))
 abs[,]=prettyNum(abs,",")
@@ -31,16 +31,16 @@ abs
 ```
 Note: Rows=Origins, Columns=Destinations
 
-<!-- #sum(na.omit(FGB[["start city"]]=="Berkeley" & FGB[["end city"]]=="Emeryville")) -->
+<!-- #sum(na.omit(FGB[["StartCity"]]=="Berkeley" & FGB[["EndCity"]]=="Emeryville")) -->
 <!-- #Rows=Origins -->
 <!-- #Columns=Destination -->
 
 ```{r rel matrix}
 options(scipen=999)
-rel=round(table(FGB[["start city"]][!is.na(FGB[["start city"]]) & !is.na(FGB[["end city"]])],
-      FGB[["end city"]][!is.na(FGB[["start city"]]) & !is.na(FGB[["end city"]])])/sum(
-        table(FGB[["start city"]][!is.na(FGB[["start city"]]) & !is.na(FGB[["end city"]])],
-              FGB[["end city"]][!is.na(FGB[["start city"]]) & !is.na(FGB[["end city"]])])
+rel=round(table(FGB[["StartCity"]][!is.na(FGB[["StartCity"]]) & !is.na(FGB[["EndCity"]])],
+      FGB[["EndCity"]][!is.na(FGB[["StartCity"]]) & !is.na(FGB[["EndCity"]])])/sum(
+        table(FGB[["StartCity"]][!is.na(FGB[["StartCity"]]) & !is.na(FGB[["EndCity"]])],
+              FGB[["EndCity"]][!is.na(FGB[["StartCity"]]) & !is.na(FGB[["EndCity"]])])
       ),3)
 rel=cbind(rel,"Origin Total"=apply(rel,1,sum))
 rel=rbind(rel,"Destination Total"=apply(rel,2,sum))
@@ -64,13 +64,13 @@ table_data=function(dt=FGB,var1,var2,col1,col2,select1,select2){
 
 ### Popular ods by City
 ``` {r ods}
-ss=filter_data(FGB,"start_station_name","end_station_name")
-x1=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","San Francisco","San Francisco"),decreasing=T)[1:10])
+ss=filter_data(FGB,"StartStationName","EndStationName")
+x1=as.matrix(sort(table_data(ss,"StartStationName","EndStationName","StartCity","EndCity","San Francisco","San Francisco"),decreasing=T)[1:10])
 rownames(x1)[10]=paste0(strsplit(rownames(x1)[10],"")[[1]][1:(length(strsplit(rownames(x1)[10],"")[[1]])-24)],collapse="")
-x2=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","Oakland","Oakland"),decreasing=T)[1:10])
-x3=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","Berkeley","Berkeley"),decreasing=T)[1:10])
-x4=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","San Jose","San Jose"),decreasing=T)[1:10])
-x5=as.matrix(sort(table_data(ss,"start_station_name","end_station_name","start city","end city","Emeryville","Emeryville"),decreasing=T)[1:10])
+x2=as.matrix(sort(table_data(ss,"StartStationName","EndStationName","StartCity","EndCity","Oakland","Oakland"),decreasing=T)[1:10])
+x3=as.matrix(sort(table_data(ss,"StartStationName","EndStationName","StartCity","EndCity","Berkeley","Berkeley"),decreasing=T)[1:10])
+x4=as.matrix(sort(table_data(ss,"StartStationName","EndStationName","StartCity","EndCity","San Jose","San Jose"),decreasing=T)[1:10])
+x5=as.matrix(sort(table_data(ss,"StartStationName","EndStationName","StartCity","EndCity","Emeryville","Emeryville"),decreasing=T)[1:10])
 ods=cbind(rownames(x1),x1,
               rownames(x2),x2,
               rownames(x3),x3,
@@ -84,15 +84,16 @@ x1;x2;x3;x4;x5
 ````
 
 1 Dimension Filter Functions
+
 ``` {r 1d filter functions}
 filter_data_1d=function(dt=FGB,var1,col=c(),vars=c(),not=T){
   if (length(vars)==0 & length(col)==0){
     dt=dt[!is.na(dt[[var1]]) & dt[[var1]]!="NULL"]
   } else{
     if (not){
-      dt=dt[!is.na(dt[[var1]]) & dt[[var1]]!="NULL" & !(dt[[col]] %in% vars)]
+      dt=dt[!is.na(dt[[var1]]) & !(dt[[col]] %in% vars)]
     } else {
-      dt=dt[!is.na(dt[[var1]]) & dt[[var1]]!="NULL" & (dt[[col]] %in% vars)]
+      dt=dt[!is.na(dt[[var1]]) & (dt[[col]] %in% vars)]
     }
   }
   return(dt)
@@ -106,13 +107,13 @@ table_data_1d=function(dt=FGB,var1,col1,select1){
 
 ### Popular Origins by City
 ``` {r Popular Origins}
-ss=filter_data_1d(FGB,"start_station_name")
+ss=filter_data_1d(FGB,"StartStationName")
 
-x1=as.matrix(sort(table_data_1d(ss,"start_station_name","start city","San Francisco"),decreasing=T)[1:10])
-x2=as.matrix(sort(table_data_1d(ss,"start_station_name","start city","Oakland"),decreasing=T)[1:10])
-x3=as.matrix(sort(table_data_1d(ss,"start_station_name","start city","Berkeley"),decreasing=T)[1:10])
-x4=as.matrix(sort(table_data_1d(ss,"start_station_name","start city","San Jose"),decreasing=T)[1:10])
-x5=as.matrix(sort(table_data_1d(ss,"start_station_name","start city","Emeryville"),decreasing=T)[1:10])
+x1=as.matrix(sort(table_data_1d(ss,"StartStationName","StartCity","San Francisco"),decreasing=T)[1:10])
+x2=as.matrix(sort(table_data_1d(ss,"StartStationName","StartCity","Oakland"),decreasing=T)[1:10])
+x3=as.matrix(sort(table_data_1d(ss,"StartStationName","StartCity","Berkeley"),decreasing=T)[1:10])
+x4=as.matrix(sort(table_data_1d(ss,"StartStationName","StartCity","San Jose"),decreasing=T)[1:10])
+x5=as.matrix(sort(table_data_1d(ss,"StartStationName","StartCity","Emeryville"),decreasing=T)[1:10])
 origins=cbind(rownames(x1),x1,
               rownames(x2),x2,
               rownames(x3),x3,
@@ -127,12 +128,12 @@ x1;x2;x3;x4;x5
 
 ### Popular Destinations by City
 ``` {r Popular Destinations}
-ss=filter_data_1d(FGB,"end_station_name")
-x1=as.matrix(sort(table_data_1d(ss,"end_station_name","end city","San Francisco"),decreasing=T)[1:10])
-x2=as.matrix(sort(table_data_1d(ss,"end_station_name","end city","Oakland"),decreasing=T)[1:10])
-x3=as.matrix(sort(table_data_1d(ss,"end_station_name","end city","Berkeley"),decreasing=T)[1:10])
-x4=as.matrix(sort(table_data_1d(ss,"end_station_name","end city","San Jose"),decreasing=T)[1:10])
-x5=as.matrix(sort(table_data_1d(ss,"end_station_name","end city","Emeryville"),decreasing=T)[1:10])
+ss=filter_data_1d(FGB,"EndStationName")
+x1=as.matrix(sort(table_data_1d(ss,"EndStationName","EndCity","San Francisco"),decreasing=T)[1:10])
+x2=as.matrix(sort(table_data_1d(ss,"EndStationName","EndCity","Oakland"),decreasing=T)[1:10])
+x3=as.matrix(sort(table_data_1d(ss,"EndStationName","EndCity","Berkeley"),decreasing=T)[1:10])
+x4=as.matrix(sort(table_data_1d(ss,"EndStationName","EndCity","San Jose"),decreasing=T)[1:10])
+x5=as.matrix(sort(table_data_1d(ss,"EndStationName","EndCity","Emeryville"),decreasing=T)[1:10])
 destinations=cbind(rownames(x1),x1,
               rownames(x2),x2,
               rownames(x3),x3,
@@ -148,7 +149,7 @@ x1;x2;x3;x4;x5
 
 ### Total Rides Over Time
 ``` {r Total Rides Over Time}
-ss=filter_data_1d(FGB,"start_date",col="start_daytype")[['start_date']]
+ss=filter_data_1d(FGB,"StartDate",col="StartDayType")[['StartDate']]
 ```
 
 ``` {r a0}
@@ -156,89 +157,89 @@ plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All
 ```
 
 ``` {r a}
-plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday","Sunday"),not=T)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Weekdays)")
+plot(table(filter_data_1d(FGB,"StartDate",col="StartDayType",vars=wday(c(1,7),T),not=T)[["StartDate"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Weekdays)")
 ```
 
 ``` {r b}
-plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays)")
+plot(table(filter_data_1d(FGB,"StartDate",col="StartDayType",vars=c("Sat"),not=F)[["StartDate"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sats)")
 ```
 
 ``` {r c}
-plot(table(filter_data_1d(FGB,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays)")
+plot(table(filter_data_1d(FGB,"StartDate",col="StartDayType",vars=c("Sun"),not=F)[["StartDate"]]),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Suns)")
 ```
 
 ``` {r berk0}
-berk=FGB[FGB[["start city"]]=="Berkeley" & FGB[["end city"]]=="Berkeley",]
-ss=filter_data_1d(berk,"start_date",col="start_daytype")[['start_date']]
+berk=FGB[FGB[["StartCity"]]=="Berkeley" & FGB[["EndCity"]]=="Berkeley",]
+ss=filter_data_1d(berk,"StartDate",col="StartDayType")[['StartDate']]
 ```
 ``` {r berk1}
 plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nBerkeley")
 ```
 ``` {r berk3}
-plot(table(filter_data_1d(berk,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nBerkeley")
+plot(table(filter_data_1d(berk,"StartDate",col="StartDayType",vars=c("Sat"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sats) \nBerkeley")
 ```
 ``` {r berk4}
-plot(table(filter_data_1d(berk,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nBerkeley")
+plot(table(filter_data_1d(berk,"StartDate",col="StartDayType",vars=c("Sun"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Suns) \nBerkeley")
 ```
 ``` {r sanjose0}
-sanjose=FGB[FGB[["start city"]]=="San Jose" & FGB[["end city"]]=="San Jose",]
-ss=filter_data_1d(sanjose,"start_date",col="start_daytype")[['start_date']]
+sanjose=FGB[FGB[["StartCity"]]=="San Jose" & FGB[["EndCity"]]=="San Jose",]
+ss=filter_data_1d(sanjose,"StartDate",col="StartDayType")[['StartDate']]
 ```
 ``` {r sanjose1}
 plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nSan Jose")
 ```
 ``` {r sanjose3}
-plot(table(filter_data_1d(sanjose,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nSan Jose")
+plot(table(filter_data_1d(sanjose,"StartDate",col="StartDayType",vars=c("Sat"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sats) \nSan Jose")
 ```
 ``` {r sanjose4}
-plot(table(filter_data_1d(sanjose,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nSan Jose")
+plot(table(filter_data_1d(sanjose,"StartDate",col="StartDayType",vars=c("Sun"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Suns) \nSan Jose")
 ```
 ``` {r sanFrancisco0}
-sanFrancisco=FGB[FGB[["start city"]]=="San Francisco" & FGB[["end city"]]=="San Francisco",]
-ss=filter_data_1d(sanFrancisco,"start_date",col="start_daytype")[['start_date']]
+sanFrancisco=FGB[FGB[["StartCity"]]=="San Francisco" & FGB[["EndCity"]]=="San Francisco",]
+ss=filter_data_1d(sanFrancisco,"StartDate",col="StartDayType")[['StartDate']]
 ```
 ``` {r sanFrancisco1}
 plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nSan Francisco")
 ```
 ``` {r sanFrancisco3}
-plot(table(filter_data_1d(sanFrancisco,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nSan Francisco")
+plot(table(filter_data_1d(sanFrancisco,"StartDate",col="StartDayType",vars=c("Sat"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sats) \nSan Francisco")
 ```
 ``` {r sanFrancisco4}
-plot(table(filter_data_1d(sanFrancisco,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nSan Francisco")
+plot(table(filter_data_1d(sanFrancisco,"StartDate",col="StartDayType",vars=c("Sun"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Suns) \nSan Francisco")
 ```
 ``` {r Oakland0}
-Oakland=FGB[FGB[["start city"]]=="Oakland" & FGB[["end city"]]=="Oakland",]
-ss=filter_data_1d(Oakland,"start_date",col="start_daytype")[['start_date']]
+Oakland=FGB[FGB[["StartCity"]]=="Oakland" & FGB[["EndCity"]]=="Oakland",]
+ss=filter_data_1d(Oakland,"StartDate",col="StartDayType")[['StartDate']]
 ```
 ``` {r Oakland1}
 plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nOakland")
 ```
 ``` {r Oakland3}
-plot(table(filter_data_1d(Oakland,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nOakland")
+plot(table(filter_data_1d(Oakland,"StartDate",col="StartDayType",vars=c("Sat"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sats) \nOakland")
 ```
 ``` {r Oakland4}
-plot(table(filter_data_1d(Oakland,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nOakland")
+plot(table(filter_data_1d(Oakland,"StartDate",col="StartDayType",vars=c("Sun"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Suns) \nOakland")
 ```
 ``` {r Emeryville0}
-Emeryville=FGB[FGB[["start city"]]=="Emeryville" & FGB[["end city"]]=="Emeryville",]
-ss=filter_data_1d(Emeryville,"start_date",col="start_daytype")[['start_date']]
+Emeryville=FGB[FGB[["StartCity"]]=="Emeryville" & FGB[["EndCity"]]=="Emeryville",]
+ss=filter_data_1d(Emeryville,"StartDate",col="StartDayType")[['StartDate']]
 ```
 ``` {r Emeryville1}
 plot(table(ss),xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(All Daytypes) \nEmeryville")
 ```
 ``` {r Emeryville3}
-plot(table(filter_data_1d(Emeryville,"start_date",col="start_daytype",vars=c("Saturday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Saturdays) \nEmeryville")
+plot(table(filter_data_1d(Emeryville,"StartDate",col="StartDayType",vars=c("Sat"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sats) \nEmeryville")
 ```
 ``` {r Emeryville4}
-plot(table(filter_data_1d(Emeryville,"start_date",col="start_daytype",vars=c("Sunday"),not=F)[["start_date"]]),
-     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Sundays) \nEmeryville")
+plot(table(filter_data_1d(Emeryville,"StartDate",col="StartDayType",vars=c("Sun"),not=F)[["StartDate"]]),
+     xlab="Date",ylab="Total Rides",main="Total Rides over Time \n(Suns) \nEmeryville")
 ```

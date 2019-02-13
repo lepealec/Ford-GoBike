@@ -1,7 +1,7 @@
 ---
 title: "Ford GoBike Data Collection & Cleaning"
 author: "Alec Lepe"
-date: "09/07/2018"
+date: "02/12/2018"
 output: 
   html_document:
     fig_width: 6
@@ -25,99 +25,100 @@ library(xts)
 knitr::opts_chunk$set(fig.width=8, fig.height=7)
 ```
 ``` {r load}
-setwd("~/Ford-GoBike/Clean Data")
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
 load("FGB.RData")
 ```
 ``` {r total_bikeship}
-x=FGB[,length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[,length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]])
+y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_sf}
-x=FGB[`start city`=="San Francisco" & `end city`=="San Francisco",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartCity=="San Francisco" & EndCity=="San Francisco",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("Intra-SF Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 
 ``` {r total_bikeship_oa}
-x=FGB[`start city`=="Oakland" & `end city`=="Oakland",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartCity=="Oakland" & EndCity=="Oakland",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("Intra-Oakland Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_berkeley}
-x=FGB[`start city`=="Berkeley" & `end city`=="Berkeley",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartCity=="Berkeley" & EndCity=="Berkeley",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("Intra-Berkeley Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_em}
-x=FGB[`start city`=="Emeryville" & `end city`=="Emeryville",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartCity=="Emeryville" & EndCity=="Emeryville",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("Intra-Emeryville Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_sj}
-x=FGB[`start city`=="San Jose" & `end city`=="San Jose",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartCity=="San Jose" & EndCity=="San Jose",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("Intra-San Jose Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_non_intras}
-x=FGB[`start city`!=`end city`,length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartCity!=EndCity,length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("Non Intra-City Total Rides")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 
 
 ``` {r total_bikeship_sa}
-x=FGB[start_daytype=="Saturday",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartDayType=="Sat",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides (Saturdays)")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 
 ``` {r total_bikeship_su}
-x=FGB[start_daytype=="Sunday",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartDayType=="Sun",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides (Sundays)")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_weekends}
-x=FGB[start_daytype=="Saturday" | start_daytype=="Sunday",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[StartDayType=="Sat" | StartDayType=="Sun",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides (Weekends)")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 ``` {r total_bikeship_weekdays}
-x=FGB[substr(start_daytype,1,1)!="S",length(bike_id),by=.(start_date)]
-x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+x=FGB[substr(StartDayType,1,1)!="S",length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 colnames(x)[2]="Total Rides"
-x=x[order(x[["start_date"]]),]
-y=xts(x,x[["start_date"]])
+x=x[order(x[["StartDate"]]),]
+y=xts(x,x[["StartDate"]]);y=y[,-1]
 dygraph(y,xlab="Date",ylab=("Total Rides"),main=c("System Wide Total Rides (Weekdays)")) %>% dySeries(label="Total Rides", color="Blue") %>% dyRangeSelector()
 ```
 

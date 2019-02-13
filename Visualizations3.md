@@ -1,7 +1,7 @@
 ---
 title: "Ford GoBike Data Visualization3"
 author: "Alec Lepe"
-date: "09/07/2018"
+date: "02/12/2018"
 output: 
   html_document:
     keep_md: true
@@ -11,12 +11,12 @@ output:
 ### Load Data
 
 ```r
-setwd("~/Ford-GoBike/Clean Data")
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
 load("FGB.RData")
 ```
 
 ```r
-FGB %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) + 
+FGB %>% ggplot(aes(x=StartMonthLabel)) + geom_bar() + facet_grid(StartYear ~ .) + 
   xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
   ggtitle("Total Rides Over Time by Month")
 ```
@@ -25,40 +25,40 @@ FGB %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .
 
 
 ```r
-berk=FGB[FGB[["start city"]]=="Berkeley" & FGB[["end city"]]=="Berkeley",]
-berk %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+berk=FGB[FGB[["StartCity"]]=="Berkeley" & FGB[["EndCity"]]=="Berkeley",]
+berk %>% ggplot(aes(x=StartMonthLabel)) + geom_bar() + facet_grid(StartYear ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
   ggtitle("Total Rides Over Time by Month\nBerkeley")
 ```
 
 ![](Visualizations3_files/figure-html/graph5a-1.png)<!-- -->
 
 ```r
-sanjose=FGB[FGB[["start city"]]=="San Jose" & FGB[["end city"]]=="San Jose",]
-sanjose %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+sanjose=FGB[FGB[["StartCity"]]=="San Jose" & FGB[["EndCity"]]=="San Jose",]
+sanjose %>% ggplot(aes(x=StartMonthLabel)) + geom_bar() + facet_grid(StartYear ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
   ggtitle("Total Rides Over Time by Month\nSan Jose")
 ```
 
 ![](Visualizations3_files/figure-html/graph5b-1.png)<!-- -->
 
 ```r
-Oakland=FGB[FGB[["start city"]]=="Oakland" & FGB[["end city"]]=="Oakland",]
-Oakland %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+Oakland=FGB[FGB[["StartCity"]]=="Oakland" & FGB[["EndCity"]]=="Oakland",]
+Oakland %>% ggplot(aes(x=StartMonthLabel)) + geom_bar() + facet_grid(StartYear ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
   ggtitle("Total Rides Over Time by Month\nOakland")
 ```
 
 ![](Visualizations3_files/figure-html/graph5c-1.png)<!-- -->
 
 ```r
-SF=FGB[FGB[["start city"]]=="San Francisco" & FGB[["end city"]]=="San Francisco",]
-SF %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+SF=FGB[FGB[["StartCity"]]=="San Francisco" & FGB[["EndCity"]]=="San Francisco",]
+SF %>% ggplot(aes(x=StartMonthLabel)) + geom_bar() + facet_grid(StartYear ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
   ggtitle("Total Rides Over Time by Month \nSan Francisco")
 ```
 
 ![](Visualizations3_files/figure-html/graph5d-1.png)<!-- -->
 
 ```r
-Emeryville=FGB[FGB[["start city"]]=="Emeryville" & FGB[["end city"]]=="Emeryville",]
-Emeryville %>% ggplot(aes(x=start_monthlabel)) + geom_bar() + facet_grid(start_year ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
+Emeryville=FGB[FGB[["StartCity"]]=="Emeryville" & FGB[["EndCity"]]=="Emeryville",]
+Emeryville %>% ggplot(aes(x=StartMonthLabel)) + geom_bar() + facet_grid(StartYear ~ .) +xlab("Month") + scale_y_continuous(name="Count", labels = scales::comma) +
   ggtitle("Total Rides Over Time by Month \nEmeryville")
 ```
 

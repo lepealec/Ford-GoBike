@@ -30,30 +30,31 @@ cc=function(x,y="\\ "){
 }
 
 ###
-# setwd("~/Ford-GoBike/Clean Data")
+# setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
 #  load("FGB.RData")
-# y=FGB[,length(bike_id),by=c('start_date','start city','end city','start_station_name','end_station_name')]
+# y=FGB[,length(BikeID),by=c('StartDate','StartCity','EndCity','StartStationName','EndStationName')]
 # colnames(y)[ncol(y)]="Total Rides"
-# y=y[y[["start_station_name"]]!="NULL",]
-# y=y[y[["start city"]]!="NA",]
-# y=y[y[["end city"]]!="NA",]
+# y=y[y[["StartStationName"]]!="NULL",]
+# y=y[y[["StartCity"]]!="NA",]
+# y=y[y[["EndCity"]]!="NA",]
 # 
-# yx=FGB[,length(bike_id),by=c('start_date','start city','end city')]
-# colnames(yx)[ncol(yx)]="Total Rides"
-# yx=yx[yx[["start city"]]!="<NA>",]
-# yx=yx[yx[["end city"]]!="<NA>",]
+# yx=FGB[,length(BikeID),by=c('StartDate','StartCity','EndCity')]
+# colnames(yx)[ncol(yx)]="TotalRides"
+# yx=yx[yx[["StartCity"]]!="<NA>",]
+# yx=yx[yx[["EndCity"]]!="<NA>",]
 # 
-# x=FGB[,length(bike_id),by=.(start_date)]
-# x[["start_date"]]=as.Date(x[["start_date"]],"%Y-%m-%d")
+# x=FGB[,length(BikeID),by=.(StartDate)]
+# x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
 # colnames(x)[2]="Total Rides"
-# x[["start_date"]]
-# x[["Daytype"]]=as.character(wday(x[["start_date"]],T))
-# yx[["Daytype"]]=as.character(wday(yx[["start_date"]],T))
-# y[["Daytype"]]=as.character(wday(y[["start_date"]],T))
+# #x[["StartDate"]]
+# x[["DayType"]]=as.character(wday(x[["StartDate"]],T))
+# yx[["DayType"]]=as.character(wday(yx[["StartDate"]],T))
+# y[["DayType"]]=as.character(wday(y[["StartDate"]],T))
 # save(x,y,yx,file="FGB2.RDAta")
 ###
 
 #setwd("~/Ford-GoBike/Clean Data")
+
 load("FGB2.RData")
 #x date total rides
 #y date cit city name name total rides
@@ -61,7 +62,7 @@ load("FGB2.RData")
 load("stations.RData")
 
 # stations ID Name City
-# stations=unique(as.data.table(cbind(FGB[["start_station_id"]],FGB[["start_station_name"]],FGB[['start city']])))
+# stations=unique(as.data.table(cbind(FGB[["start_station_id"]],FGB[["StartStationName"]],FGB[['StartCity']])))
 # stations=stations[stations[[1]]!="NULL",]
 # stations=stations[stations[[3]]!="<NA>",]
 # colnames(stations)=c("StationID","Name","City")
@@ -70,7 +71,7 @@ load("stations.RData")
 cities=unique(stations[["City"]])
 wellPanel(
 radioButtons("Show","Show Station Library",c("Yes","No"),inline=T,selected = "No"),
-checkboxGroupInput("Daytype", "Day Type(s)",wday(seq(1,7),T),selected=wday(seq(2,6),T),inline=T),
+checkboxGroupInput("DayType", "Day Type(s)",wday(seq(1,7),T),selected=wday(seq(2,6),T),inline=T),
 radioButtons("Type","Trip Type",cc("Intra Cities-Origins-Destinations-Specific OD","-"))
 )
 
@@ -103,37 +104,37 @@ ShowStations=reactive({
 renderDataTable(ShowStations())
 SelectData=reactive({
   if (input$Type=="Intra Cities"){
-    return(yx[yx[["Daytype"]] %in% input$Daytype & 
-                yx[["start city"]] %in% input$IntraOriginCities &
-                yx[["end city"]] %in% input$IntraDestinationCities,])
-    m=yx[yx[["Daytype"]] %in% "Wed" & 
-                yx[["start city"]] %in% c("Berkeley","Oakland") &
-                yx[["end city"]] %in% c("Berkeley","Oakland"),]
+    return(yx[yx[["DayType"]] %in% input$DayType & 
+                yx[["StartCity"]] %in% input$IntraOriginCities &
+                yx[["EndCity"]] %in% input$IntraDestinationCities,])
+    m=yx[yx[["DayType"]] %in% "Wed" & 
+                yx[["StartCity"]] %in% c("Berkeley","Oakland") &
+                yx[["EndCity"]] %in% c("Berkeley","Oakland"),]
   }
   if (input$Type=="Origins"){
-    return(y[y[["Daytype"]] %in% input$Daytype & 
-                y[["start_station_name"]] %in% input$OriginStations,])
+    return(y[y[["DayType"]] %in% input$DayType & 
+                y[["StartStationName"]] %in% input$OriginStations,])
   }
   if (input$Type=="Destinations"){
-    return(y[y[["Daytype"]] %in% input$Daytype & 
-                y[["end_station_name"]] %in% input$DestinationStations,])
+    return(y[y[["DayType"]] %in% input$DayType & 
+                y[["EndStationName"]] %in% input$DestinationStations,])
   }
   if (input$Type=="Specific OD"){
-    return(y[y[["Daytype"]] %in% input$Daytype & 
-                y[["start_station_name"]] %in% input$SOrigin &
-                y[["end_station_name"]] %in% input$SDestination,])
+    return(y[y[["DayType"]] %in% input$DayType & 
+                y[["StartStationName"]] %in% input$SOrigin &
+                y[["EndStationName"]] %in% input$SDestination,])
   }
 })
 graphdata=function(x){
   m=x
-  m=m[,!"start city"]
-  m=m[,!"end city"]
-  m=m[,!"Daytype"]
-  m=m[,!"start_station_name"]
-  m=m[,!"end_station_name"]
-  m=m[,sum(`Total Rides`),c("start_date")]
-  ind=m[["start_date"]]
-  m=m[,!"start_date"]
+  m=m[,!"StartCity"]
+  m=m[,!"EndCity"]
+  m=m[,!"DayType"]
+  m=m[,!"StartStationName"]
+  m=m[,!"EndStationName"]
+  m=m[,sum(`Total Rides`),c("StartDate")]
+  ind=m[["StartDate"]]
+  m=m[,!"StartDate"]
   out=xts(m,ymd(ind))
   colnames(out)="Total Trips"
   y=dygraph(out,main="Ford GoBike Bike Trips over Time") %>% dyRangeSelector()
