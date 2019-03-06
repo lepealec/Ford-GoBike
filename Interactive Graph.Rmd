@@ -25,7 +25,7 @@ library(xts)
 knitr::opts_chunk$set(fig.width=8, fig.height=7)
 ```
 ``` {r load}
-setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
+setwd("C:/Users/04616598/Box Sync/Documents/Data Sciance/msds_6372InferenceAndModeling/Project 02/Ford-GoBike/Clean Data")
 load("FGB.RData")
 ```
 ``` {r total_bikeship}
