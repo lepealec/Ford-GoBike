@@ -1,5 +1,5 @@
 ---
-title: "Ford GoBike Data Collection & Cleaning"
+title: "Ford GoBike Load Data"
 author: "Alec Lepe"
 date: "02/12/2018"
 output: 
@@ -7,55 +7,79 @@ output:
     keep_md: true
 ---
 
-## Load Ford GoBike Data
-This is an R Markdown document that downloads and cleans publicly available individual trip history Ford GoBike Data.
-### Session Info
-```{r sessionInfo}
-sessionInfo()
+``` {r load_base_functions,echo=FALSE,message=FALSE}
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,fig.height=1,figwidth=1,warnings=F)
 ```
-### Load libraries
-```{r setup, include = FALSE}
-library("lubridate")
-library("reshape")
-library("data.table")
-library("RCurl")
-library("tidyverse")
-library("skimr")
-library("ggplot2")
-library("lubridate")
-library("rjson")
-knitr::opts_chunk$set(fig.width = 5, fig.asp = 1/3)
+
+``` {r library, include=F,echo=F}
+library("lubridate");library("reshape");library("data.table");library("RCurl");library("tidyverse");library("skimr");library("ggplot2");library("lubridate");library("rjson")
+knitr::opts_chunk$set(fig.width = 1, fig.length=1, fig.asp = 1,  message=FALSE)
 ```
-### Helper functions
-``` {r helper}
+
+``` {r HelperFunctions}
+cc=function(x,y=" "){
+  strsplit(as.character(x),split=y)[[1]]
+}
+
+ann=function(x){
+  if (is.matrix(x)){
+    for (i in seq(1,ncol(x))){
+      #z=all(as.numeric(unique(x[,i]))==unique(x[[i]]))
+      z=all(as.numeric(unique(x[,i]))==unlist(lapply(lapply(strsplit(unique(x[,i]),""),function(x) x[x!="" & x!=" "]),function(x)paste(x,collapse=""))))
+      if(!is.na(z) | sum(is.na(as.numeric(x[,i])))==0){
+        if (z){
+          mode(x[,i])='numeric'
+        }
+      }
+    }
+  } else {
+    for (i in seq(1,ncol(x))){
+      #        print(i)
+      z=all(as.numeric(unique(x[[i]]))==unlist(lapply(lapply(strsplit(as.character(unique(x[[i]])),""),function(x) x[x!="" & x!=" "]),function(x)paste(x,collapse=""))))
+      #        z=z | all(as.numeric(as.character(x[[i]]))==as.numeric(as.character(x[[i]])))
+      if (!is.na(z)){
+        yz="0 " %in% x[[i]] | " 0" %in% x[[i]]
+        if (sum(is.na(as.numeric(x[[i]])))==0 | z | yz){
+          if (!(colnames(x)[i] %in% c("Ticket","action","VAR1","Ticket_SN","Smart_Card_SN"))){
+            mode(x[[i]])='numeric'
+          }
+        } 
+        
+      }
+    }
+  }
+  return(x)
+}
 GenMatrix=function(cns,name){
   y=matrix(ncol=length(cns),nrow=0)
   colnames(y)=cns
   assign(paste(name),y,envir=.GlobalEnv)
 }
 ```
+
+### Load Data
+``` {r load, message=F}
 ### Load 2017 data
-```{r load_2017}
-setwd("~/Ford-GoBike")
-#fn="FGB 2017 Data.csv"
-FGB2017=fread("https://s3.amazonaws.com/fordgobike-data/2017-fordgobike-tripdata.csv")
-```
-### Load available 2018 data
-```{r load_2018}
-#setwd("~/Ford-GoBike")
 setwd("~/Desktop/Projects/Ford-GoBike/Raw Data")
-for (yrmo in c(seq(201801,201812),201901)){
-  #yrmo=201812
-  link=paste0("https://s3.amazonaws.com/fordgobike-data/",yrmo,"-fordgobike-tripdata.csv.zip")
-  zip=strsplit(link,"/")[[1]][5]
-  csv=paste(strsplit(zip,"\\.")[[1]][1:2],collapse=".")
-  if (!csv %in% list.files(getwd()) & url.exists(link)){
-    download.file(link, dest=zip, mode="wb") 
-    unzip (zip, exdir = getwd())
-    file.remove(zip)
+go=F
+if (!("FGB.csv" %in% list.files()) | go){
+  if (!("FGB 2017 Data.csv" %in% list.files())){
+    FGB2017=fread("https://s3.amazonaws.com/fordgobike-data/2017-fordgobike-tripdata.csv")
+    fwrite(FGB2017,"FGB 2017 Data.csv") 
   }
-}
-fwrite(FGB2017,"FGB 2017 Data.csv") 
+  ### Load data
+  for (yrmo in c(seq(201801,201812),201901,201902)){
+    #yrmo=201812
+    link=paste0("https://s3.amazonaws.com/fordgobike-data/",yrmo,"-fordgobike-tripdata.csv.zip")
+    zip=strsplit(link,"/")[[1]][5]
+    csv=paste(strsplit(zip,"\\.")[[1]][1:2],collapse=".")
+    if (!(csv %in% list.files(getwd())) & url.exists(link)){
+      download.file(link, dest=zip, mode="wb") 
+      unzip (zip, exdir = getwd())
+      file.remove(zip)
+    }
+  }
+  
   FGB2017=fread("FGB 2017 Data.csv")
   Jan2018=fread("201801-fordgobike-tripdata.csv") 
   Feb2018=fread("201802-fordgobike-tripdata.csv") 
@@ -70,35 +94,44 @@ fwrite(FGB2017,"FGB 2017 Data.csv")
   Nov2018=fread("201811-fordgobike-tripdata.csv") 
   Dec2018=fread("201812-fordgobike-tripdata.csv")
   Jan2019=fread("201901-fordgobike-tripdata.csv")
+  Feb2019=fread("201902-fordgobike-tripdata.csv")
   #expand to include future months when available
-```
-### Combine all data into one data table.
-```{r Combine}
-FGB=rbindlist(list(FGB2017,
-                   Jan2018,Feb2018,Mar2018,
-                   Apr2018,May2018,Jun2018,
-                   Jul2018,Aug2018,Sep2018,
-                   Oct2018,Nov2018,Dec2018,
-                   Jan2019
-                   ),fill=T)
-rm(list=c('FGB2017',
-          'Jan2018',
-          'Feb2018',
-          'Apr2018',
-          'May2018',
-          'Jun2018',
-          'Jul2018',
-          'Aug2018',
-          'Sep2018',
-          'Oct2018',
-          'Nov2018',
-          'Dec2018','Jan2019'
-))
+  
+  ### Combine all data into one data table.
+  FGB=rbindlist(list(FGB2017,
+                     Jan2018,Feb2018,Mar2018,
+                     Apr2018,May2018,Jun2018,
+                     Jul2018,Aug2018,Sep2018,
+                     Oct2018,Nov2018,Dec2018,
+                     Jan2019,Feb2019
+  ),fill=T)
+  rm(list=c('FGB2017',
+            'Jan2018',
+            'Feb2018',
+            'Apr2018',
+            'May2018',
+            'Jun2018',
+            'Jul2018',
+            'Aug2018',
+            'Sep2018',
+            'Oct2018',
+            'Nov2018',
+            'Dec2018','Jan2019','Feb2019'
+  ))
+  #expand to include future months when available
+  fwrite(FGB,"FGB.csv")
+  save(FGB,file="FGB.RData")
+}
 
-#expand to include future months when available
-```
-### Attach Starting and Ending Cities
-```{r GetStations, message=FALSE}
+setwd("~/Desktop/Projects/Ford-GoBike/Raw Data")
+FGB=fread("FGB.csv")
+#load("FGB.RData") #FGB
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
+#save(FGB,file="FGB.RData")
+``` 
+
+### Generate Station Library and Attach Starting and Ending Cities to FGB
+``` {r}
 json_file="https://gbfs.fordgobike.com/gbfs/en/station_information.json"
 StationInfo=fromJSON(paste(readLines(json_file), collapse=","))
 StationList=StationInfo[[3]][[1]]
@@ -109,7 +142,12 @@ for (i in 1:length(StationList)){
   y=rbindlist(list(y,as.data.table(StationList[[i]])),fill=T)
 }
 Stations=y
-Stations
+for (i in seq(1,ncol(Stations))){
+  mode(Stations[[i]])="character"
+}
+Stations=ann(Stations)
+setwd("~/Desktop/Projects/Ford-GoBike/Raw Data")
+fwrite(as.data.table(Stations),"Stations.csv")
 
 json_file="https://gbfs.fordgobike.com/gbfs/en/system_regions.json"
 SystemRegions=fromJSON(paste(readLines(json_file), collapse=","))
@@ -120,12 +158,12 @@ for (i in seq(1,length(x)-1,2)){
 }
 RegionIDs=data.table(y)
 mode(RegionIDs[["region_id"]])="numeric"
-RegionIDs
 
+mode(Stations[["region_id"]])="numeric"
 Stations=merge(Stations,RegionIDs,by="region_id")
 Stations=Stations[,!"eightd_station_services",with=F]
 setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
-write.csv(Stations,"stations.csv")
+fwrite(Stations,"stations.csv")
 
 origins=as.data.table(cbind(Stations[["station_id"]],Stations[["City"]]))
 colnames(origins)=c("start_station_id","start city")
@@ -138,20 +176,20 @@ FGB=merge(FGB,origins,by="start_station_id",all.x=TRUE,allow.cartesian=TRUE)
 FGB=merge(FGB,destinations,by="end_station_id",all.x=TRUE,allow.cartesian=TRUE)
 FGB[["age"]]=as.numeric(strsplit(strsplit(as.character(now()),split=" ")[[1]][1],"-")[[1]][1])-FGB[["member_birth_year"]]
 ```
+
 ### Extract date data from start_time and end_time variables
-```{r AttachDateStatistics}
-cc=function(x,y=" "){
-  strsplit(as.character(x),split=y)[[1]]
-}
+``` {r}
+setwd("~/Desktop/Projects/Ford-GoBike/Raw Data")
+if ("FGB.RData" %in% list.files()  | go){
 colnames(FGB)=cc("EndStationID StartStationID DurationSec StartTime EndTime StartStationName StartStationLatitude StartStationLongitude EndStationName EndStationLatitude EndStationLongitude BikeID UserType MemberBirthYear MemberGender BikeShareForAllTrip StartCity EndCity Age")
 r=as.vector(vapply(FGB[["StartTime"]],function(x) strsplit(x," ")[[1]][1],character(1)))
 r2=as.vector(vapply(FGB[["StartTime"]],function(x) strsplit(x," ")[[1]][2],character(1)))
 FGB[["StartDate"]]=as.Date(r,"%Y-%m-%d")
 FGB[["StartYear"]]=year(FGB[["StartDate"]])
 FGB[["StartMonth"]]=month(FGB[["StartDate"]])
-FGB[["StartMonthLabel"]]=month(FGB[["StartDate"]],T)
+FGB[["StartMonthLabel"]]=lubridate::month(FGB[["StartDate"]],T)
 FGB[["StartDay"]]=day(FGB[["StartDate"]])
-FGB[["StartDayType"]]=as.character(wday(FGB[["StartDate"]],T))
+FGB[["StartDayType"]]=as.character(lubridate::wday(FGB[["StartDate"]],T))
 FGB[["StartTsec"]]=round(period_to_seconds(hms(r2)))
 FGB[["StartHr"]]=hour(FGB[["StartTime"]])
 FGB[["StartMin"]]=minute(FGB[["StartTime"]])
@@ -162,14 +200,42 @@ r2=as.vector(vapply(FGB[["EndTime"]],function(x) strsplit(x," ")[[1]][2],charact
 FGB[["EndDate"]]=as.Date(r,"%Y-%m-%d")
 FGB[["EndYear"]]=year(FGB[["EndDate"]])
 FGB[["EndMonth"]]=month(FGB[["EndDate"]])
-FGB[["EndMonthLabel"]]=month(FGB[["EndDate"]],T)
+FGB[["EndMonthLabel"]]=lubridate::month(FGB[["EndDate"]],T)
 FGB[["EndDay"]]=day(FGB[["EndDate"]])
-FGB[["EndDayType"]]=as.character(wday(FGB[["EndDate"]],T))
+FGB[["EndDayType"]]=as.character(lubridate::wday(FGB[["EndDate"]],T))
 FGB[["EndTsec"]]=round(period_to_seconds(hms(r2)))
 FGB[["EndHr"]]=hour(FGB[["EndTime"]])
 FGB[["EndMin"]]=minute(FGB[["EndTime"]])
 FGB[["EndSec"]]=second(FGB[["EndTime"]])
-FGB
-setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
+
+setwd("~/Desktop/Projects/Ford-GoBike/Raw Data")
 save("FGB",file="FGB.RData")
+}
+setwd("~/Desktop/Projects/Ford-GoBike/Raw Data")
+load("FGB.RData") #FGB
+byv=c("StartCity","EndCity","StartDate","StartHr","StartMonthLabel","StartYear","StartDayType")
+FGB[["Count"]]=1
+
+hourly=FGB[,sum(Count),byv]
+colnames(hourly)[ncol(hourly)]="Count"
+hourly=hourly[!(is.na(hourly[["StartCity"]]) | is.na(hourly[["EndCity"]])),]
+
+cities=unique(hourly[["StartCity"]])
+dates=unique(hourly[["StartDate"]])
+hrs=unique(hourly[["StartHr"]])
+all=merge(cities,cities)
+all=merge(all,as.data.table(dates))
+all=merge(all,as.data.table(hrs))
+all=as.data.table(all)
+colnames(all)=cc("StartCity EndCity StartDate StartHr")
+all=merge(all,hourly,by=colnames(all),all.x = TRUE)
+all[["StartMonthLabel"]]=lubridate::month(all[["StartDate"]],T)
+all[["StartYear"]]=year(all[["StartDate"]])
+all[["StartDayType"]]=as.character(lubridate::wday(all[["StartDate"]],T))
+all[is.na(all[["Count"]]),][["Count"]]=0
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
+fwrite(all,"Summarized FGB.csv")
+save(all,file="Summarized FGB.RData")
+save(FGB,file="FGB.RData")
 ```
+

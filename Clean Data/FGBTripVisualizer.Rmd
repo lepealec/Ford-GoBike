@@ -30,27 +30,27 @@ cc=function(x,y="\\ "){
 }
 
 ###
-# setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
-#  load("FGB.RData")
-# y=FGB[,length(BikeID),by=c('StartDate','StartCity','EndCity','StartStationName','EndStationName')]
-# colnames(y)[ncol(y)]="Total Rides"
-# y=y[y[["StartStationName"]]!="NULL",]
-# y=y[y[["StartCity"]]!="NA",]
-# y=y[y[["EndCity"]]!="NA",]
-# 
-# yx=FGB[,length(BikeID),by=c('StartDate','StartCity','EndCity')]
-# colnames(yx)[ncol(yx)]="TotalRides"
-# yx=yx[yx[["StartCity"]]!="<NA>",]
-# yx=yx[yx[["EndCity"]]!="<NA>",]
-# 
-# x=FGB[,length(BikeID),by=.(StartDate)]
-# x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
-# colnames(x)[2]="Total Rides"
-# #x[["StartDate"]]
-# x[["DayType"]]=as.character(wday(x[["StartDate"]],T))
-# yx[["DayType"]]=as.character(wday(yx[["StartDate"]],T))
-# y[["DayType"]]=as.character(wday(y[["StartDate"]],T))
-# save(x,y,yx,file="FGB2.RDAta")
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
+ load("FGB.RData")
+y=FGB[,length(BikeID),by=c('StartDate','StartCity','EndCity','StartStationName','EndStationName')]
+colnames(y)[ncol(y)]="Total Rides"
+y=y[y[["StartStationName"]]!="NULL",]
+y=y[y[["StartCity"]]!="NA",]
+y=y[y[["EndCity"]]!="NA",]
+
+yx=FGB[,length(BikeID),by=c('StartDate','StartCity','EndCity')]
+colnames(yx)[ncol(yx)]="TotalRides"
+yx=yx[yx[["StartCity"]]!="<NA>",]
+yx=yx[yx[["EndCity"]]!="<NA>",]
+
+x=FGB[,length(BikeID),by=.(StartDate)]
+x[["StartDate"]]=as.Date(x[["StartDate"]],"%Y-%m-%d")
+colnames(x)[2]="Total Rides"
+#x[["StartDate"]]
+x[["DayType"]]=as.character(lubridate::wday(x[["StartDate"]],T))
+yx[["DayType"]]=as.character(lubridate::wday(yx[["StartDate"]],T))
+y[["DayType"]]=as.character(lubridate::wday(y[["StartDate"]],T))
+save(x,y,yx,file="FGB2.RDAta")
 ###
 
 #setwd("~/Ford-GoBike/Clean Data")
