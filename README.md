@@ -1,7 +1,7 @@
 ---
 title: "Load Ford GoBike Data V2"
 author: "Alec"
-date: "9/6/2018"
+date: "04/17/2018"
 output: github_document
 ---
 
@@ -9,7 +9,7 @@ output: github_document
 Visualization of anonymized trip level data of pubicly available Ford GoBike Data.
 
 ### Date Range
-June 2017 - February 2019
+June 2017 - March 2019
 
 ### Links
 Load Data: https://github.com/lepealec/Ford-GoBike/blob/master/LoadData.md
