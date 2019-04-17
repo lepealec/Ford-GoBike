@@ -1,7 +1,7 @@
 ---
 title: "Ford GoBike Data Visualization"
 author: "Alec Lepe"
-date: "03/05/2018"
+date: "4/16/2018"
 output: 
   html_document:
     keep_md: true
@@ -21,7 +21,7 @@ fig.path = "~/Figures"
 ```
 ### Load Data
 ```{r load}
-setwd("C:/Users/04616598/Box Sync/Documents/Data Sciance/msds_6372InferenceAndModeling/Project 02/Ford-GoBike/Clean Data")
+setwd("~/Desktop/Projects/Ford-GoBike/Clean Data")
 load("FGB.RData")
 ```
 ## Visualizations
