@@ -4,7 +4,7 @@ author: "Alec Lepe"
 date: "05/08/2018"
 output: 
   html_document:
-    fi g_width: 6
+    fig_width: 6
     fig_height: 4
 ---
   <!-- html_document: -->
